@@ -1,0 +1,6 @@
+version: 2
+
+sources:
+  - name: mlb_statcast
+    tables:
+      - name: raw_statcast
