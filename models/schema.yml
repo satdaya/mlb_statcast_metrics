@@ -489,3 +489,15 @@ models:
         description: The change in Run Expectancy before the Pitch and after the Pitch
       - name: at_bat_id
         description: primary key. concat of pitcher, batter, at_bat_number, pitch_number, game_pk
+      - name: horizontal_loc
+        description: relation of the ball to the batter on the horizontal plane
+        tests:
+          - accepted_values:
+              values: ['inside', 'middle', 'outside', 'inner half border', 'outer half border', 'ball']
+      - name: vertical_loc
+        description: relation of the ball to the batter on the vertical plane
+        tests:
+          - accepted_values:
+              values: ['low', 'middle', 'high', 'high border', 'low border', 'ball']
+      - name: precision_location
+        description: baseball parlance for pitch location. ie 'high and inside', 'low and outside', etc

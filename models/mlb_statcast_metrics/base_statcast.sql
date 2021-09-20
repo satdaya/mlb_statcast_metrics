@@ -15,7 +15,7 @@ SELECT
   ,release_speed
   ,release_pos_x
   ,release_pos_z
-  ,player_name
+  ,player_name AS pitcher_full_name
   ,SPLIT_PART(player_name, ', ', -1) AS pitcher_first_name
   ,SPLIT_PART(player_name, ', ', 1) AS pitcher_last_name
   ,CASE WHEN des ILIKE ('%:%')
@@ -112,4 +112,38 @@ SELECT
   ,delta_home_win_exp
   ,ROUND( delta_run_exp, 4 ) AS delta_run_exp
   ,pitcher||batter||at_bat_number||pitch_number||game_pk AS at_bat_id
+  ,CASE WHEN stand = 'R' AND zone IN ('1', '4', '7')
+        THEN 'inside'
+        WHEN stand = 'R' AND zone IN ('2', '5', '8')
+        THEN 'middle'
+        WHEN stand = 'R' AND zone IN ('3', '6', '9')
+        THEN 'outside'
+        WHEN stand = 'L' AND zone IN ('1', '4', '7')
+        THEN 'outside'
+        WHEN stand = 'L' AND zone IN ('2', '5', '8')
+        THEN 'middle'
+        WHEN stand = 'L' AND zone IN ('3', '6', '9')
+        THEN 'inside'
+        WHEN zone IN ('11', '13')
+        THEN 'inner half border'
+        WHEN zone IN ('12', '14')
+        THEN 'outer half border'
+        ELSE 'ball'
+        END AS horizontal_loc
+  ,CASE WHEN zone IN ('1', '2', '3')
+        THEN 'low'
+        WHEN zone IN ('4', '5', '6')
+        THEN 'middle'
+        WHEN zone IN ('7', '8', '9')
+        THEN 'high'
+        WHEN zone IN ('11', '12')
+        THEN 'high border'
+        WHEN zone IN ('11', '12')
+        THEN 'low border'
+        ELSE 'ball'
+        END AS vertical_loc
+  ,CASE WHEN horizontal_loc = 'ball' AND vertical_loc = 'ball'
+        THEN 'ball'
+        ELSE vertical_loc || ' and ' || horizontal_loc
+        END AS precision_location
 FROM cte_raw_statcast
