@@ -1,0 +1,491 @@
+version: 2
+
+sources:
+  - name: mlb_statcast_metrics
+    description: raw data scraped from baseball savant
+    schema: baseball
+    database: mlb_stats
+    tables:
+      - name: statcast_raw_load 
+        columns:
+         - name: dummy_row
+           description: index_column
+         - name: pitch_type
+           description: Two digit abbreviation for pitch
+           tests:
+             - accepted_values:
+                 values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
+         - name: game_date
+           description: day game was played
+         - name: release_speed
+           description: Pitch velocity as it leaves the hand.
+         - name: release_pos_x
+           description: Horizontal Release Position of the ball measured in feet from the catcher's perspective
+         - name: release_pos_x
+           description: Vertical Release Position of the ball measured in feet from the catcher's perspective
+         - name: player_name
+           description: pitcher name
+         - name: batter
+           description: 6 digit mlb player number for batter
+         - name: pitcher
+           description: 6 digit mlb player number for pitcher
+         - name: _events
+           description: when it is the last pitch in the PA, the result of the PA is listed as a string. when not the last pitch, NULL value
+         - name: spin_dir
+           description: Deprecated field from the old tracking system.
+         - name: spin_rate_deprecated
+           description: Deprecated field from the old tracking system. Replaced by release_spin
+         - name: break_angle_deprecated
+           description: Deprecated field from the old tracking system.
+         - name: break_length_deprecated
+           description: Deprecated field from the old tracking system.
+         - name: zone
+           description: the 14 zones making up the strike zone. NULL's are pitches that did not cross any part of the strike zone
+           tests:
+             - accepted_values:
+                 values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+         - name: des
+           description: long string detailing the play. this is the description displayed in the statcast game feed
+         - name: game_type
+           description: type of game (spring_training, regular_season, playoffs)
+           tests:
+             - accepted_values:
+                 values: ['E', 'S', 'R', 'F', 'D', 'L', 'W']
+         - name: stand
+           description: Side of the plate batter is standing
+           tests:
+             - accepted_values:
+                 values: ['L', 'R']
+         - name: p_throws
+           description: Hand pitcher throws with
+           tests:
+             - accepted_values:
+                 values: ['L', 'R']
+         - name: home_team
+           description: abbreviation of the hometeam
+           tests:
+             - accepted_values:
+                 values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+         - name: away_team
+           description: abbreviation of the hometeam
+           tests:
+             - accepted_values:
+                 values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+         - name: type
+           description: Short hand of pitch result. B = ball, S = strike, X = in play.
+           tests:
+             - accepted_values:
+                 values: ['B', 'S', 'X']
+         - name: hit_location
+           description: Position of first fielder to touch the ball.
+           tests:
+             - accepted_values:
+                 values: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+         - name: bb_type
+           description: type of ball put in play
+           tests:
+             - accepted_values:
+                 values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
+         - name: bb_type
+           description: type of ball put in play
+           tests:
+              - accepted_values: 
+                  values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
+         - name: balls
+           description: balls in the count
+           tests:
+             - accepted_values:
+                 values: [0, 1, 2, 3, 4]
+         - name: strikes
+           description: strikes in the count
+           tests:
+             - accepted_values:
+                 values: [0, 1, 2, 3]
+         - name: game_year
+           description: year game took place
+           tests:
+             - accepted_values:
+                 values: ['2017', '2018', '2019', '2020', '2021']
+         - name: pfx_x
+           description: Horizontal movement in feet from the catcher's perspective.
+         - name: pfx_z
+           description: Vertical movement in feet from the catcher's perpsective.
+         - name: plate_x
+           description: Vertical movement in feet from the catcher's perpsective.
+         - name: plate_z
+           description: Vertical position of the ball when it crosses home plate from the catcher's perspective.
+         - name: on_3b
+           description: 6 digit mlb player number for runner on 3rd base
+         - name: on_2b
+           description: 6 digit mlb player number for runner on 2nd base
+         - name: on_1b
+           description: 6 digit mlb player number for runner on 2nd base
+         - name: outs_when_up
+           description: outs during plate appearance
+           tests:
+             - accepted_values:
+                 values: [0, 1, 2]
+         - name: inning
+           description: Pre-pitch inning number
+           tests:
+             - accepted_values:
+                 values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+         - name: inning_topbot
+           description: Pre-pitch top or bottom of inning
+           tests:
+             - accepted_values:
+                 values: ['Top', 'Bot']
+         - name: hc_x
+           description: hit coordinate X of batted ball
+         - name: hc_y
+           description: hit coordinate Y of batted ball
+         - name: tfs_deprecated
+           description: Deprecated field from the old tracking system
+         - name: tfs_zulu_deprecated
+           description: Deprecated field from the old tracking system
+         - name: fielder_2
+           description: pre-pitch mlb player id of catcher
+         - name: umpire
+           description: Deprecated field from the old tracking system
+         - name: sv_id
+           description: Non-unique id of play event per game
+         - name: vx0
+           description: The velocity of the pitch, in feet per second, in x-dimension, determined at y=50 feet
+         - name: vy0
+           description: The velocity of the pitch, in feet per second, in y-dimension, determined at y=50 feet
+         - name: ax
+           description: The acceleration of the pitch, in feet per second per second, in x-dimension, determined at y=50 feet
+         - name: ay
+           description: The acceleration of the pitch, in feet per second per second, in y-dimension, determined at y=50 feet
+         - name: az
+           description: The acceleration of the pitch, in feet per second per second, in z-dimension, determined at y=50 feet
+         - name: sz_top
+           description: Top of the batter's strike zone set by the operator when the ball is halfway to the plate
+         - name: sz_bot
+           description: Bottom of the batter's strike zone set by the operator when the ball is halfway to the plate
+         - name: hit_distance
+           description: projected hit distance of batted ball
+         - name: launch_speed
+           description: Exit velocity of the batted ball as tracked by Statcast
+         - name: launch_angle
+           description: Launch angle of the batted ball as tracked by Statcast
+         - name: effective_speed
+           description: Derived speed based on the the extension of the pitcher's release
+         - name: release_spin_rate
+           description: Spin rate of pitch tracked by Statcast
+         - name: release_extension
+           description: Release extension of pitch in feet as tracked by Statcast
+         - name: game_pk
+           description: unique id for game
+         - name: fielder_3
+           description: 6 digit mlb player number for 1b
+         - name: fielder_4
+           description: 6 digit mlb player number for 2b
+         - name: fielder_5
+           description: 6 digit mlb player number for 3b
+         - name: fielder_6
+           description: 6 digit mlb player number for SS
+         - name: fielder_7
+           description: 6 digit mlb player number for LF
+         - name: fielder_8
+           description: 6 digit mlb player number for CF
+         - name: fielder_9
+           description: 6 digit mlb player number for RF
+         - name: release_pos_y
+           description: Release position of pitch measured in feet from the catcher's perspective
+         - name: estimated_ba_using_speedangle
+           description: Estimated Batting Avg based on launch angle and exit velocity
+         - name: estimated_woba_using_speedangle
+           description: Estimated wOBA based on launch angle and exit velocity
+         - name: woba_value
+           description: wOBA value based on result of play
+         - name: woba_denom
+           description: wOBA denominator based on result of play
+         - name: babip_value
+           description: BABIP value based on result of play
+         - name: iso_value
+           description: ISO value based on result of play
+         - name: launch_speed_angle
+           description: Launch speed/angle zone based on launch angle and exit velocity. 1 - Weak 2- Topped 3 - Under 4 - Flare/Burner 5 - Solid Contact 6 - Barrel
+         - name: at_bat_number
+           description: Plate appearance number of the game
+         - name: pitch_number
+           description: Total pitch number of the plate appearance
+         - name: pitch_name
+           description: The name of the pitch derived from the Statcast Data
+         - name: home_score
+           description: Pre-pitch home score
+         - name: away_score
+           description: Pre-pitch away score
+         - name: bat_score
+           description: Pre-pitch bat team score
+         - name: fld_score
+           description: Pre-pitch field team score
+         - name: post_away_score
+           description: Post-pitch away score
+         - name: post_home_score
+           description: Post-pitch home score
+         - name: post_bat_score
+           description: Post-pitch home score
+         - name: post_fld_score
+           description: Post-pich field score
+         - name: if_fielding_alignment
+           description: Infield fielding alignment at the time of the pitch
+           tests:
+             - accepted_values:
+                 values: ['Infield shift', 'Standard', 'Strategic']
+         - name: of_fielding_alignment
+           description: Outfield fielding alignment at the time of the pitch
+           tests:
+             - accepted_values:
+                 values: ['4th outfielder', 'Extreme outfield shift', 'Standard', 'Strategic']
+         - name: spin_axis
+           description: The Spin Axis in the 2D X-Z plane in degrees from 0 to 360, such that 180 represents a pure backspin fastball and 0 degrees represents a pure topspin (12-6) curveball
+         - name: delta_home_win_exp
+           description: The change in Win Expectancy before the Plate Appearance and after the Plate Appearance
+         - name: delta_run_exp
+           description: The change in Run Expectancy before the Pitch and after the Pitch 
+
+models:
+  - name: base_statcast
+    columns:
+      - name: pitch_type
+        description: Two digit abbreviation for pitch
+        tests:
+          - accepted_values:
+              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+      - name: gm_date
+        description: day game was played
+      - name: release_speed
+        description: Pitch velocity as it leaves the hand.
+      - name: release_pos_x
+        description: Horizontal Release Position of the ball measured in feet from the catcher's perspective
+      - name: release_pos_x
+        description: Vertical Release Position of the ball measured in feet from the catcher's perspective
+      - name: pitcher_full_name
+        description: full name of pitcher
+      - name: pitcher_first_name
+        description: additive column to the raw load. first name of pitcher
+      - name: pitcher_last_name - added 
+        description: additive column to the raw load. last name of pitcher
+      - name: step_one_batter_name
+        description: additive column to the raw load. Batter names are not included in load, this column parses sentences for extraction later
+      - name: batter_full_name
+        description: additive column to the raw load. full name of pitcher
+      - name: batter_last_name
+        description: additive column to the raw load. last name of batter
+      - name: batter_first_name
+        description: additive column to the raw load. first name of batter
+      - name: batter_id
+        description: 6 digit mlb player number for batter
+      - name: pitcher_id
+        description: 6 digit mlb player number for pitcher
+      - name: _events
+        description: when it is the last pitch in the PA, the result of the PA is listed as a string. when not the last pitch, NULL value
+      - name: description
+        description: result of each pitch
+        tests:
+          - accepted_values:
+              values: ['called_strike', 'hit_by_pitch', 'foul_bunt', 'bunt_foul_tip', 'swinging_pitchout', 'ball', 'blocked_ball', 'pitchout', 'swinging_strike_blocked', 'foul_tip', 'swinging_strike', 'foul', 'foul_pitchout', 'hit_into_play', 'missed_bunt']
+      - name: zone
+        description: the 14 zones making up the strike zone. NULL's are pitches that did not cross any part of the strike zone
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+      - name: des
+        description: long string detailing the play. this is the description displayed in the statcast game feed
+      - name: game_type
+        description: type of game (spring_training, regular_season, playoffs)
+        tests:
+          - accepted_values:
+              values: ['E', 'S', 'R', 'F', 'D', 'L', 'W']
+      - name: stand
+        description: Side of the plate batter is standing
+        tests:
+          - accepted_values:
+              values: ['L', 'R']
+      - name: p_throws
+        description: Hand pitcher throws with
+        tests:
+          - accepted_values:
+              values: ['L', 'R']
+      - name: home_team
+        description: abbreviation of the hometeam
+        tests:
+          - accepted_values: 
+              values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+      - name: away_team
+        description: abbreviation of the hometeam
+        tests:
+          - accepted_values:
+              values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+      - name: type
+        description: Short hand of pitch result. B = ball, S = strike, X = in play.
+        tests:
+          - accepted_values:
+              values: ['B', 'S', 'X']
+      - name: hit_location
+        description: Position of first fielder to touch the ball.
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      - name: bb_type
+        description: type of ball put in play
+        tests:
+          - accepted_values:
+              values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
+      - name: bb_type
+        description: type of ball put in play
+        tests:
+          - accepted_values:
+              values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
+      - name: balls
+        description: balls in the count
+        tests:
+          - accepted_values:
+              values: [0, 1, 2, 3, 4]
+      - name: strikes
+        description: strikes in the count
+        tests:
+          - accepted_values:
+              values: [0, 1, 2, 3]
+      - name: game_year
+        description: year game took place
+        tests:
+          - accepted_values:
+              values: ['2017', '2018', '2019', '2020', '2021']
+      - name: pfx_x
+        description: Horizontal movement in feet from the catcher's perspective.
+      - name: pfx_z
+        description: Vertical movement in feet from the catcher's perpsective.
+      - name: plate_x
+        description: Vertical movement in feet from the catcher's perpsective.
+      - name: plate_z
+        description: Vertical position of the ball when it crosses home plate from the catcher's perspective.
+      - name: on_3b
+        description: 6 digit mlb player number for runner on 3rd base
+      - name: on_2b
+        description: 6 digit mlb player number for runner on 2nd base
+      - name: on_1b
+        description: 6 digit mlb player number for runner on 2nd base
+      - name: outs_when_up
+        description: outs during plate appearance
+        tests:
+          - accepted_values:
+              values: [0, 1, 2]
+      - name: inning
+        description: Pre-pitch inning number
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+      - name: inning_topbot
+        description: Pre-pitch top or bottom of inning
+        tests:
+          - accepted_values:
+              values: ['Top', 'Bot']
+      - name: hc_x
+        description: hit coordinate X of batted ball
+      - name: hc_y
+        description: hit coordinate Y of batted ball
+      - name: catcher
+        description: pre-pitch mlb player id of catcher
+      - name: sv_id
+        description: Non-unique id of play event per game
+      - name: vx0
+        description: The velocity of the pitch, in feet per second, in x-dimension, determined at y=50 feet
+      - name: vy0
+        description: The velocity of the pitch, in feet per second, in y-dimension, determined at y=50 feet
+      - name: ax
+        description: The acceleration of the pitch, in feet per second per second, in x-dimension, determined at y=50 feet
+      - name: ay
+        description: The acceleration of the pitch, in feet per second per second, in y-dimension, determined at y=50 feet
+      - name: az
+        description: The acceleration of the pitch, in feet per second per second, in z-dimension, determined at y=50 feet
+      - name: sz_top
+        description: Top of the batter's strike zone set by the operator when the ball is halfway to the plate
+      - name: sz_bot
+        description: Bottom of the batter's strike zone set by the operator when the ball is halfway to the plate
+      - name: hit_distance
+        description: projected hit distance of batted ball
+      - name: launch_speed
+        description: Exit velocity of the batted ball as tracked by Statcast
+      - name: launch_angle
+        description: Launch angle of the batted ball as tracked by Statcast
+      - name: effective_speed
+        description: Derived speed based on the the extension of the pitcher's release
+      - name: release_spin_rate
+        description: Spin rate of pitch tracked by Statcast
+      - name: release_extension
+        description: Release extension of pitch in feet as tracked by Statcast
+      - name: game_pk
+        description: unique id for game
+      - name: fielder_3
+        description: 6 digit mlb player number for 1b
+      - name: fielder_4
+        description: 6 digit mlb player number for 2b
+      - name: fielder_5
+        description: 6 digit mlb player number for 3b
+      - name: fielder_6
+        description: 6 digit mlb player number for SS
+      - name: fielder_7
+        description: 6 digit mlb player number for LF
+      - name: fielder_8
+        description: 6 digit mlb player number for CF
+      - name: fielder_9
+        description: 6 digit mlb player number for RF
+      - name: release_pos_y
+        description: Release position of pitch measured in feet from the catcher's perspective
+      - name: estimated_ba_using_speedangle
+        description: Estimated Batting Avg based on launch angle and exit velocity
+      - name: estimated_woba_using_speedangle
+        description: Estimated wOBA based on launch angle and exit velocity
+      - name: woba_value
+        description: wOBA value based on result of play
+      - name: woba_denom
+        description: wOBA denominator based on result of play
+      - name: babip_value
+        description: BABIP value based on result of play
+      - name: iso_value
+        description: ISO value based on result of play
+      - name: launch_speed_angle
+        description: Launch speed/angle zone based on launch angle and exit velocity. 1 - Weak 2- Topped 3 - Under 4 - Flare/Burner 5 - Solid Contact 6 - Barrel
+      - name: at_bat_number
+        description: Plate appearance number of the game
+      - name: pitch_number
+        description: Total pitch number of the plate appearance
+      - name: pitch_name
+        description: The name of the pitch derived from the Statcast Data
+      - name: home_score
+        description: Pre-pitch home score
+      - name: away_score
+        description: Pre-pitch away score
+      - name: bat_score
+        description: Pre-pitch bat team score
+      - name: fld_score
+        description: Pre-pitch field team score
+      - name: post_away_score
+        description: Post-pitch away score
+      - name: post_home_score
+        description: Post-pitch home score
+      - name: post_bat_score
+        description: Post-pitch home score
+      - name: post_fld_score
+        description: Post-pich field score
+      - name: if_fielding_alignment
+        description: Infield fielding alignment at the time of the pitch
+        tests:
+          - accepted_values:
+              values: ['Infield shift', 'Standard', 'Strategic']
+      - name: of_fielding_alignment
+        description: Outfield fielding alignment at the time of the pitch
+        tests:
+          - accepted_values:
+              values: ['4th outfielder', 'Extreme outfield shift', 'Standard', 'Strategic']
+      - name: spin_axis
+        description: The Spin Axis in the 2D X-Z plane in degrees from 0 to 360, such that 180 represents a pure backspin fastball and 0 degrees represents a pure topspin (12-6) curveball
+      - name: delta_home_win_exp
+        description: The change in Win Expectancy before the Plate Appearance and after the Plate Appearance
+      - name: delta_run_exp
+        description: The change in Run Expectancy before the Pitch and after the Pitch
+      - name: at_bat_id
+        description: primary key. concat of pitcher, batter, at_bat_number, pitch_number, game_pk

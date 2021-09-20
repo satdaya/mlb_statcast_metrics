@@ -1,16 +1,17 @@
 {{
     config(
+      materialized= 'table',
       unique_key= "at_bat_id"
     )
 }}
 
 WITH cte_raw_statcast AS (
-  SELECT * FROM {{ source( mlb_statcast, raw_statcast) }}
+  SELECT * FROM {{ source( 'mlb_statcast_metrics', 'statcast_raw_load') }}
 )
 
 SELECT 
    pitch_type
-  ,game_date::VARCHAR(10) AS gm_date
+  ,game_date::date AS gm_date
   ,release_speed
   ,release_pos_x
   ,release_pos_z
@@ -24,8 +25,8 @@ SELECT
   ,SPLIT_PART(step_one_batter_name, ' ', 1) || ' ' || SPLIT_PART(step_one_batter_name, ' ', 2) AS batter_full_name
   ,SPLIT_PART(batter_full_name, ' ', -1) AS batter_first_name
   ,SPLIT_PART(batter_full_name, ' ', 1) AS batter_last_name
-  ,batter
-  ,pitcher 
+  ,batter AS batter_id
+  ,pitcher AS pitcher_id
   ,_events
   ,description
   ,spin_dir
@@ -62,12 +63,12 @@ SELECT
   ,fielder_2
   ,umpire
   ,sv_id
-  ,ROUND( vx0,11)
-  ,ROUND( vy0,11)
-  ,ROUND( vz0,11)
-  ,ROUND( ax,11)
-  ,ROUND( ay,11)
-  ,ROUND( az,11)
+  ,ROUND( vx0,11) AS vx0
+  ,ROUND( vy0,11) AS vy0
+  ,ROUND( vz0,11) AS vz0
+  ,ROUND( ax,11) AS ax
+  ,ROUND( ay,11) AS ay
+  ,ROUND( az,11) AS az
   ,sz_top                          
   ,sz_bot                          
   ,hit_distance_sc                
@@ -94,21 +95,21 @@ SELECT
   ,babip_value                     
   ,iso_value                      
   ,launch_speed_angle              
-  ,at_bat_number::NUMBER(3,0)                  
-  ,pitch_number::NUMBER(3,0)                    
+  ,at_bat_number::NUMBER(3,0) AS at_bat_number            
+  ,pitch_number::NUMBER(3,0) AS pitch_number                   
   ,pitch_name                     
-  ,home_score::NUMBER(3,0)                      
-  ,away_score::NUMBER(3,0)                       
-  ,bat_score::NUMBER(3,0)                       
-  ,fld_score::NUMBER(3,0)                        
-  ,post_away_score::NUMBER(3,0)                 
-  ,post_home_score::NUMBER(3,0)                  
-  ,post_bat_score::NUMBER(3,0)                   
-  ,post_fld_score::NUMBER(3,0)                  
+  ,home_score::NUMBER(3,0) AS home_score                  
+  ,away_score::NUMBER(3,0) AS away_score                    
+  ,bat_score::NUMBER(3,0) AS bat_score                     
+  ,fld_score::NUMBER(3,0) AS fld_score                      
+  ,post_away_score::NUMBER(3,0) AS post_away_score               
+  ,post_home_score::NUMBER(3,0) AS post_home_score               
+  ,post_bat_score::NUMBER(3,0) AS post_bat_score
+  ,post_fld_score::NUMBER(3,0) AS post_fld_score                
   ,if_fielding_alignment           
   ,of_fielding_alignment           
   ,spin_axis                                
   ,delta_home_win_exp
-  ,ROUND( delta_run_exp, 4 )
-  ,pitcher||batter||at_bat_number||pitch_number||gm_date AS at_bat_id
+  ,ROUND( delta_run_exp, 4 ) AS delta_run_exp
+  ,pitcher||batter||at_bat_number||pitch_number||game_pk AS at_bat_id
 FROM cte_raw_statcast
