@@ -271,7 +271,7 @@ models:
       - name: step_one_batter_name
         description: additive column to the raw load. Batter names are not included in load, this column parses sentences for extraction later
       - name: batter_full_name
-        description: additive column to the raw load. full name of pitcher
+        description: additive column to the raw load. full name of batter
       - name: batter_last_name
         description: additive column to the raw load. last name of batter
       - name: batter_first_name
@@ -501,3 +501,97 @@ models:
               values: ['low', 'middle', 'high', 'high border', 'low border', 'ball']
       - name: precision_location
         description: baseball parlance for pitch location. ie 'high and inside', 'low and outside', etc
+  - name: stg_plate_appearance
+    columns:
+      - name: gm_date
+        description: day game was played
+      - name: game_pk
+        description: unique id for game
+      - name: batter_id
+        description: 6 digit mlb player number for batter
+      - name: batter_full_name
+        description: additive column to the raw load. full name of batter
+      - name: pitcher_id
+        description: 6 digit mlb player number for pitcher
+      - name: pitcher_full_name
+        description: additive column to the raw load. full name of pitcher
+      - name: fld_score
+        description: Pre-pitch field team score
+      - name: bat_score   
+        description: Pre-pitch bat team score
+      - name: hit_distance
+        description: projected hit distance of batted ball
+      - name: pitch_number
+        description: Total pitch number of the plate appearance
+      - name: is_plate_appearance
+        description: boolean determining whether event was a plate appearance
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: is_at_bat
+        description: boolean determining whether event was an at bat 
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: ab_safe_or_out
+        description: boolean determining whether the batter was safe or out in an at bat 
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: pa_safe_or_out
+        description: boolean determining whether the batter was safe or out in a plate appearance 
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: bases_for_slg
+        description: boolean determining the number of plate
+           tests:
+             - accepted_values:
+                 values: [0, 1, 2, 3, 4]
+      - name: hit_by_pitch
+        description: boolean determining whether an event was a hbp
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: walk
+        description: boolean determining whether an event was a walk
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: intentional_walk
+        description: boolean determining whether an event was an intentional walk
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: single
+        description: boolean determining whether an event was a single
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: double
+        description: boolean determining whether an event was a double
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: triple
+        description: boolean determining whether an event was a triple
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: home_run
+        description: boolean determining whether an event was a home run
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+      - name: sf
+        description: boolean determining whether an event was a sac fly
+           tests:
+             - accepted_values:
+                 values: [0, 1]
+
+                 
+      
+
+      
+      
+    
