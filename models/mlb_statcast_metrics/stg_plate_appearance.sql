@@ -1,7 +1,7 @@
 {{
     config(
       materialized= 'table',
-      unique_key= "at_bat_id"
+      unique_key= 'plt_apprnc_pk'
     )
 }}
 
@@ -12,13 +12,16 @@ WITH cte_base_statcast AS (
    gm_date
   ,game_pk
   ,pitcher_id
-  ,player_name AS pitcher_full_name
+  ,pitcher_full_name
   ,batter_id
   ,batter_full_name
+  ,inning
   ,fld_score AS fielding_team_score
   ,bat_score AS batting_score
   ,hit_distance_sc
   ,pitch_number AS pitch_count_in_pa
+  ,_events
+  ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
   ,CASE WHEN _events ILIKE ('%pickoff%')
         THEN 0
         WHEN _events ILIKE ('%steal%')
@@ -103,9 +106,12 @@ WITH cte_base_statcast AS (
         THEN 1
         ELSE 0 
         END AS sf
-  ,MAX(pitch_number)
-FROM base_statcast
+  ,MAX(pitch_number) AS no_of_pitches
+FROM cte_base_statcast
 WHERE _events IS NOT NULL
   AND _events NOT IN ('wild_pitch', 'passed_ball')
-GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21
+GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
 )
+
+SELECT *
+FROM cte_batting_metrics
