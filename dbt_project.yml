@@ -24,6 +24,11 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "target"
     - "dbt_modules"
 
+seeds:
+  schema: seed_data
+  quote_columns: true
+
+
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
