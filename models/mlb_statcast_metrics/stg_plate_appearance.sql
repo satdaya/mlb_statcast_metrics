@@ -10,6 +10,7 @@ WITH cte_base_statcast AS (
 ), cte_batting_metrics AS (
   SELECT
    gm_date
+  ,game_year
   ,game_pk
   ,pitcher_id
   ,pitcher_full_name

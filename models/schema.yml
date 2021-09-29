@@ -256,6 +256,11 @@ models:
               values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
       - name: gm_date
         description: day game was played
+      - name: game_year
+        description: year game took place
+        tests:
+          - accepted_values:
+              values: ['2017', '2018', '2019', '2020', '2021']
       - name: release_speed
         description: Pitch velocity as it leaves the hand.
       - name: release_pos_x
