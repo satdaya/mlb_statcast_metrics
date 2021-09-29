@@ -246,6 +246,36 @@ sources:
          - name: delta_run_exp
            description: The change in Run Expectancy before the Pitch and after the Pitch 
 
+seeds:
+  - name: woba_fip_const
+    columns:
+      - name: index_column
+        description: automated index column
+      - name: wOBA
+        description: league wOBA (weighted on base average)
+      - name: wOBA scale
+        description: scaling measure used to calculate wOBA
+      - name: wBB
+        description: scaling measure used to calculate value of walks
+      - name: w1b
+        description: scaling measure used to calculate value of singles
+      - name: w2b
+        description: scaling measure used to calculate value of doubles
+      - name: w3b
+        description: scaling measure used to calculate value of triples
+      - name: whr
+        description: scaling measure used to calculate value of home runs
+      - name: runSB
+        description: scaling measure used to calculate value of stolen bases. does not fluctuate year to year
+      - name: runCS
+        description: undetermined measure
+      - name: r_pa
+        description:  runs per plate appearance. r/pa in fangraphs documentation. renamed as ' / ' is not allowed in column names
+      - name: r_w
+        description: undetermined measure
+      - name: cfip
+        description: contextual fielding independent fip. used to put fip on ERA scale
+
 models:
   - name: base_statcast
     columns:

@@ -23,7 +23,7 @@ WITH cte_stg_plate_appearance AS (
     --wRAA (weight runs above average) - how many runs a player adds to the team compared to the average player (scored at 0)
     ,ROUND( ( ( wOBA_pl - MIN(wf.woba) ) / MIN(wf.wobascale) ) * SUM(is_plate_appearance), 3 ) as wRAA
   FROM cte_stg_plate_appearance bs
-  JOIN cte_woba_fip_cnst
+  JOIN cte_woba_fip_cnst wf
     ON bs.game_year = wf.season
   GROUP BY 1,2
   HAVING SUM(is_plate_appearance) >= 502
