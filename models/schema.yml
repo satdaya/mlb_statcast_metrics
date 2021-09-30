@@ -540,16 +540,24 @@ models:
     columns:
       - name: gm_date
         description: day game was played
+      - name: game_year
+        description: year game was played
       - name: game_pk
-        description: unique id for game
-      - name: batter_id
-        description: 6 digit mlb player number for batter
-      - name: batter_full_name
-        description: additive column to the raw load. full name of batter
+        description: unique id for 
       - name: pitcher_id
         description: 6 digit mlb player number for pitcher
       - name: pitcher_full_name
         description: additive column to the raw load. full name of pitcher
+      - name: batter_id
+        description: 6 digit mlb player number for batter
+      - name: batter_full_name
+        description: additive column to the raw load. full name of batter
+      - name: batting_team
+        description: 3 digit abbreviation of team batting
+      - name: pitching_team
+        description: 3 digit abbreviation of team pitching
+      - name: inning
+        description: inning pa took place
       - name: fld_score
         description: Pre-pitch field team score
       - name: bat_score   
