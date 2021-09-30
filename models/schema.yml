@@ -635,10 +635,37 @@ models:
               values: [0, 1]
       - name: no_of_pitches
         description: number of pitches in plate_appearance
+  - name: stg_game_count
+    columns:
+      - name: game_pk
+        description: unique id for game
+      - name: team
+        description: abbreviation of the team
+        tests:
+          - accepted_values: 
+              values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+      - name: opponent
+        description: abbreviation of the opponent
+        tests:
+          - accepted_values:
+              values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+      - name: gm_date
+        description: day game was played
+      - name: game_year
+        description: year game took place
+        tests:
+          - accepted_values:
+              values: ['2017', '2018', '2019', '2020', '2021']
+      - name: game_count
+        description: number of games played by team ( inclusive of current date )
+      - name: yearly_game_count
+        description: number of games played by team in total. If season has finished, number of games at conclusion of the current season. If the season is still happening, number of games played by team as of that date
+      - name: comp_key
+        description: primary key. composite of game_pk and team
+        tests:
+          - unique
 
-                 
       
-
       
       
     
