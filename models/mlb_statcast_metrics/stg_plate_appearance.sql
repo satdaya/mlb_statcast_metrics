@@ -16,6 +16,16 @@ WITH cte_base_statcast AS (
   ,pitcher_full_name
   ,batter_id
   ,batter_full_name
+  ,CASE WHEN inning_topbot = 'Top'
+        THEN away_team
+        WHEN inning_topbot = 'Bot'
+        THEN home_team
+        END AS batting_team
+  ,CASE WHEN inning_topbot = 'Top'
+        THEN home_team
+        WHEN inning_topbot = 'Bot'
+        THEN away_team
+        END AS fielding_team
   ,inning
   ,fld_score AS fielding_team_score
   ,bat_score AS batting_score
@@ -107,12 +117,20 @@ WITH cte_base_statcast AS (
         THEN 1
         ELSE 0 
         END AS sf
+  ,CASE WHEN _events ILIKE ('%strikeout%')
+        THEN 1
+        ELSE 0 
+        END AS strikeout
   ,MAX(pitch_number) AS no_of_pitches
 FROM cte_base_statcast
 WHERE _events IS NOT NULL
   AND _events NOT IN ('wild_pitch', 'passed_ball')
 GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
+),
+cte_final AS (
+  SELECT *
+  FROM cte_batting_metrics
 )
 
 SELECT *
-FROM cte_batting_metrics
+FROM cte_final

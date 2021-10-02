@@ -524,6 +524,8 @@ models:
         description: The change in Run Expectancy before the Pitch and after the Pitch
       - name: at_bat_id
         description: primary key. concat of pitcher, batter, at_bat_number, pitch_number, game_pk
+        tests:
+          - unique
       - name: horizontal_loc
         description: relation of the ball to the batter on the horizontal plane
         tests:
@@ -568,6 +570,8 @@ models:
         description: Total pitch number of the plate appearance
       - name: plt_apprnc_pk
         description: primary key - concatanate of game_pk, pitcher_id, batter_id, inning 
+        tests:
+          - unique
       - name: is_plate_appearance
         description: boolean determining whether event was a plate appearance
         tests:
@@ -628,8 +632,8 @@ models:
         tests:
           - accepted_values:
               values: [0, 1]
-      - name: sf
-        description: boolean determining whether an event was a sac fly
+      - name: strikeout
+        description: boolean determining whether an event was a strikeout
         tests:
           - accepted_values:
               values: [0, 1]
