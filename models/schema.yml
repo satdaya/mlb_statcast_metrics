@@ -681,7 +681,28 @@ models:
               values: ['2017', '2018', '2019', '2020', '2021']
       - name: date_to_100_k
         description: date the batter had 100th strikeout
-  
+  - name: hitting_counts
+    columns:
+      - name: batter_id
+        description: 6 digit mlb player number for batter
+      - name: batter_full_name
+        description: additive column to the raw load. full name of batter
+      - name: game_year
+        description: year game took place
+      - name: pa
+        description: sum of plate appearances
+      - name: ab
+        description: sum of at bats
+      - name: hits
+        description: sum of hits
+      - name: singles
+        description: sum of singles
+      - name: doubles
+        description: sum of doubles
+      - name: triples
+        description: sum of triples
+      - name: home_run
+        description: sum of home runs
       
       
       
