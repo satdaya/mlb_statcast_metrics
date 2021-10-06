@@ -7,9 +7,11 @@
 
 WITH cte_stg_plate_appearance AS (
   SELECT * FROM {{ref('stg_plate_appearance')}}
-), cte_woba_fip_cnst AS (
+),
+cte_woba_fip_cnst AS (
   SELECT * FROM {{ref('woba_fip_cnst')}}
-), cte_slash_line AS (
+),
+cte_slash_line AS (
   SELECT
      batter_id
     ,batter_full_name
@@ -28,8 +30,9 @@ WITH cte_stg_plate_appearance AS (
   GROUP BY 1,2
   HAVING SUM(is_plate_appearance) >= 502
   ORDER BY 6 DESC
-  ), cte_final AS (
+  ), 
+cte_final AS (
   SELECT * FROM cte_slash_line
   )
 
-  SELECT * FROM cte_final
+SELECT * FROM cte_final

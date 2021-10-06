@@ -25,7 +25,13 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "dbt_modules"
 
 seeds:
-  quote_columns: true
+  mlb_statcast_metrics:
+    enabled: true
+    quote_columns: false
+    woba_fip_cnst:
+      +column_types: 
+        Season: date
+
 
 
 

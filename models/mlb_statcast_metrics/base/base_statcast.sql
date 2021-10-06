@@ -12,6 +12,7 @@ WITH cte_raw_statcast AS (
 SELECT 
    pitch_type
   ,game_date::date AS gm_date
+  ,DATE_TRUNC(YEAR, gm_date) AS game_year
   ,release_speed
   ,release_pos_x
   ,release_pos_z
@@ -44,8 +45,7 @@ SELECT
   ,hit_location                    
   ,bb_type                               
   ,balls                           
-  ,strikes                         
-  ,game_year                       
+  ,strikes                   
   ,pfx_x                           
   ,pfx_z                           
   ,plate_x                         
@@ -146,4 +146,104 @@ SELECT
         THEN 'ball'
         ELSE vertical_loc || ' and ' || horizontal_loc
         END AS precision_location
+  ,CASE WHEN pitch_number = 1
+        THEN pitch_type
+        ELSE NULL
+        END AS first_pitch
+  ,CASE WHEN pitch_number = 2
+        THEN pitch_type
+        ELSE NULL 
+        END AS second_pitch
+  ,CASE WHEN pitch_number = 3 
+        THEN pitch_type
+        ELSE NULL
+        END AS third_pitch
+  ,CASE WHEN pitch_number = 4
+        THEN pitch_type
+        ELSE NULL
+        END AS fourth_pitch
+  ,CASE WHEN pitch_number = 5 
+        THEN pitch_type
+        ELSE NULL
+        END AS fifth_pitch
+  ,CASE WHEN pitch_number = 6
+        THEN pitch_type
+        ELSE NULL
+        END AS sixth_pitch
+  ,CASE WHEN pitch_number = 7
+        THEN pitch_type
+        ELSE NULL
+        END AS seventh_pitch
+  ,CASE WHEN pitch_number = 8
+        THEN pitch_type
+        ELSE NULL
+        END AS eighth_pitch
+  ,CASE WHEN pitch_number = 9
+        THEN pitch_type
+        ELSE NULL
+        END AS ninth_pitch
+  ,CASE WHEN pitch_number = 10
+        THEN pitch_type
+        ELSE NULL
+        END AS tenth_pitch
+  ,CASE WHEN pitch_number = 11
+        THEN pitch_type
+        ELSE NULL
+        END AS eleventh_pitch
+  ,CASE WHEN pitch_number = 12
+        THEN pitch_type
+        ELSE NULL
+        END AS twelfth_pitch
+  ,CASE WHEN pitch_number = 13
+        THEN pitch_type
+        ELSE NULL
+        END AS thirteenth_pitch
+  ,CASE WHEN pitch_number = 14
+        THEN pitch_type
+        ELSE NULL
+        END AS fourteenth_pitch
+  ,CASE WHEN pitch_number = 15
+        THEN pitch_type
+        ELSE NULL
+        END AS fifteenth_pitch
+  ,CASE WHEN pitch_number = 16
+        THEN pitch_type
+        ELSE NULL
+        END AS sixteenth_pitch
+  ,CASE WHEN pitch_number = 17
+        THEN pitch_type
+        ELSE NULL
+        END AS seventeenth_pitch
+  ,CASE WHEN pitch_number = 18
+        THEN pitch_type
+        ELSE NULL
+        END AS eighteenth_pitchteenth_pitch
+  ,CASE WHEN pitch_number = 19
+        THEN pitch_type
+        ELSE NULL
+        END AS nineteenth_pitch
+  ,CASE WHEN pitch_number = 20
+        THEN pitch_type
+        ELSE NULL
+        END AS twentieth_pitch
+  ,CASE WHEN pitch_number = 21
+        THEN pitch_type
+        ELSE NULL
+        END AS twenty_first_pitch
+  ,CASE WHEN pitch_number = 22
+        THEN pitch_type
+        ELSE NULL
+        END AS twenty_second_pitch
+  ,CASE WHEN pitch_number = 23
+        THEN pitch_type
+        ELSE NULL
+        END AS twenty_third_pitch
+  ,CASE WHEN pitch_number = 24
+        THEN pitch_type
+        ELSE NULL
+        END AS twenty_fourth_pitch
+  ,CASE WHEN pitch_number = 25
+        THEN pitch_type
+        ELSE NULL
+        END AS twenty_fifth_pitch
 FROM cte_raw_statcast
