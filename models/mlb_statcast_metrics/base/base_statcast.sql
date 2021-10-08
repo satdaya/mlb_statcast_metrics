@@ -12,7 +12,7 @@ WITH cte_raw_statcast AS (
 SELECT 
    pitch_type
   ,game_date::date AS gm_date
-  ,DATE_TRUNC(YEAR, gm_date) AS game_year
+  ,YEAR(gm_date) :: VARCHAR(4) AS game_year
   ,release_speed
   ,release_pos_x
   ,release_pos_z
@@ -217,7 +217,7 @@ SELECT
   ,CASE WHEN pitch_number = 18
         THEN pitch_type
         ELSE NULL
-        END AS eighteenth_pitchteenth_pitch
+        END AS eighteenth_pitch
   ,CASE WHEN pitch_number = 19
         THEN pitch_type
         ELSE NULL

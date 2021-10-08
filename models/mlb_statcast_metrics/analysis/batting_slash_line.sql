@@ -15,6 +15,7 @@ cte_slash_line AS (
   SELECT
      batter_id
     ,batter_full_name
+    ,bs.game_year AS game_year
     ,ROUND( SUM(ab_safe_or_out) / SUM(is_at_bat) , 3) AS batting_avg
     ,ROUND( SUM(pa_safe_or_out) / SUM(is_plate_appearance), 3) AS obp --on base percentage
     ,ROUND( SUM(bases_for_slg) / SUM(is_at_bat), 3) as slg_percentage -- slugging percentage
@@ -27,8 +28,12 @@ cte_slash_line AS (
   FROM cte_stg_plate_appearance bs
   JOIN cte_woba_fip_cnst wf
     ON bs.game_year = wf.season
-  GROUP BY 1,2
-  HAVING SUM(is_plate_appearance) >= 502
+  JOIN stg_game_count gc
+    ON bs.game_pk = gc.game_pk
+   AND bs.game_year = gc.game_year
+   AND bs.batting_team = gc.team
+  GROUP BY 1,2,3
+  HAVING SUM(is_plate_appearance) >= (MAX(gc.game_count) * 3.1)
   ORDER BY 6 DESC
   ), 
 cte_final AS (

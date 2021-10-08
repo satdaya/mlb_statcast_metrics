@@ -30,10 +30,7 @@ seeds:
     quote_columns: false
     woba_fip_cnst:
       +column_types: 
-        Season: date
-
-
-
+        Season: VARCHAR(4)
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
