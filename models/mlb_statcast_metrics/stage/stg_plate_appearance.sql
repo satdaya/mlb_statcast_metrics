@@ -7,11 +7,13 @@
 
 WITH cte_base_statcast AS (
   SELECT * FROM {{ref('base_statcast')}}
-), cte_pitch_sequence AS (
+),cte_pitch_sequence AS (
   SELECT
      game_pk
     ,pitcher_id
+    ,pitcher_full_name
     ,batter_id
+    ,batter_full_name
     ,inning
     ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
     ,first_pitch
@@ -40,9 +42,8 @@ WITH cte_base_statcast AS (
     ,twenty_fourth_pitch
     ,twenty_fifth_pitch
   FROM cte_base_statcast
-  GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
-)
-plate_appearance cte_batting_metrics AS (
+),
+cte_batting_metrics AS (
   SELECT
    gm_date
   ,game_year
