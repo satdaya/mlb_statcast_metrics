@@ -6,15 +6,21 @@
     )
 }}
 
-WITH cte_pitch_number AS (
+WITH cte_base_statcast AS (
+  SELECT * FROM {{ref('base_statcast')}}
+  ),
+cte_pitch_number AS (
   SELECT
      game_pk
     ,pitcher_id
+    ,pitcher_full_name
     ,batter_id
+    ,batter_full_name
     ,inning
     ,pitch_number
     ,pitch_type
-    ,game_pk || pitcher_id || batter_id || inning  AS plate_appearance
+    ,_events
+    ,game_pk || pitcher_id || batter_id || inning  AS plt_apprnc_pk
     ,MAX(CASE WHEN pitch_number = 1 
               THEN pitch_type
               END) AS first_pitch 
@@ -90,12 +96,32 @@ WITH cte_pitch_number AS (
     ,MAX(CASE WHEN pitch_number = 25
               THEN pitch_type
               END) AS twenty_fifth_pitch
-  FROM base_statcast
-  GROUP BY 1,2,3,4,5,6,7
+  FROM cte_base_statcast
+  GROUP BY 1,2,3,4,5,6,7,8,9
   ),
+cte_outcome AS (
+  SELECT
+     game_pk
+    ,pitcher_id
+    ,batter_id
+    ,inning
+    ,game_pk || pitcher_id || batter_id || inning  AS plt_apprnc_pk
+    ,CASE WHEN _events IS NOT NULL
+          THEN _events
+          END AS outcome
+  FROM base_statcast
+  WHERE _events IS NOT NULL
+   ),
 cte_condensed AS (
   SELECT
-    DISTINCT plate_appearance
+    DISTINCT pn.plt_apprnc_pk
+    ,pn.game_pk
+    ,pn.pitcher_id
+    ,pitcher_full_name
+    ,pn.batter_id
+    ,batter_full_name
+    ,pn.inning
+    ,o.outcome
     ,IFNULL(MAX(first_pitch), '' ) AS first_pitch
     ,IFNULL(MAX(second_pitch), '' ) AS second_pitch
     ,IFNULL(MAX(third_pitch), '' ) AS third_pitch
@@ -121,8 +147,10 @@ cte_condensed AS (
     ,IFNULL(MAX(twenty_third_pitch), '' ) AS twenty_third_pitch
     ,IFNULL(MAX(twenty_fourth_pitch), '' ) AS twenty_fourth_pitch
     ,IFNULL(MAX(twenty_fifth_pitch), '' ) AS twenty_fifth_pitch
-  FROM cte_pitch_number
-  GROUP BY 1
+  FROM cte_pitch_number pn
+  JOIN cte_outcome o
+    ON pn.plt_apprnc_pk = o.plt_apprnc_pk
+  GROUP BY 1,2,3,4,5,6,7,8
 ),
 cte_pitch_sequence AS (
   SELECT *
@@ -138,4 +166,4 @@ cte_final AS (
   FROM cte_pitch_sequence
 )  
 SELECT *
-FROM cte_pitch_sequence
+FROM cte_final
