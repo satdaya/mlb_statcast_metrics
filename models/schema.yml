@@ -248,11 +248,12 @@ sources:
 
 seeds:
   - name: woba_fip_const
+    description: fangraphs woba & fip constraints
     columns:
       - name: index_column
         description: automated index column
       - name: season
-        description: season year
+        description: season 
       - name: wOBA
         description: league wOBA (weighted on base average)
       - name: wOBA scale
@@ -277,6 +278,26 @@ seeds:
         description: undetermined measure
       - name: cfip
         description: contextual fielding independent fip. used to put fip on ERA scale
+  - name: statcast_events
+    description: info on mlb statcast events
+    columns: 
+      - name: _events
+        description: statcast defined event
+      - name: is_pa
+        description: yes/no determining whether event was a plate appearance
+      - name: is_pa_bool
+        description: boolean determining whether event was a plate appearance
+      - name: is_at_bat
+        description: yes/no determining whether event was an at bat
+      - name: is_at_bat_bool
+        description: boolean determining whether event was an at bat
+      - name: safe_or_out
+        description: yes/no determining whether event was an at bat
+      - name: safe_or_out_bool
+        description: boolean determining whether event was an at bat
+      - name: bases_for_slg
+        description: determining the number of bases taken in an ab
+        
 
 models:
   - name: base_statcast
@@ -720,7 +741,7 @@ models:
           - accepted_values:
               values: [0, 1]
       - name: bases_for_slg
-        description: boolean determining the number of plate
+        description:  the number of bases taken in an ab
         tests:
           - accepted_values:
               values: [0, 1, 2, 3, 4]
