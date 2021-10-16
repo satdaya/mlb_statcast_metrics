@@ -295,6 +295,14 @@ seeds:
         description: yes/no determining whether event was an at bat
       - name: safe_or_out_bool
         description: boolean determining whether event was an at bat
+      - name: ab_safe_or_out
+        description: yes_no determining whether the batter was safe or out in an at bat 
+      - name: ab_safe_or_out_bool
+        description: boolean determining whether the batter was safe or out in an at bat 
+      - name: pa_safe_or_out
+        description: yes_no determining whether the batter was safe or out in a pa 
+      - name: pa_safe_or_out_bool
+        description: boolean determining whether the batter was safe or out in a pa
       - name: bases_for_slg
         description: determining the number of bases taken in an ab
         
