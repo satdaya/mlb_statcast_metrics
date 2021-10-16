@@ -7,7 +7,7 @@
 
 WITH cte_raw_statcast AS (
   SELECT * FROM {{ source( 'mlb_statcast_metrics', 'statcast_raw_load') }}
-)
+), cte_base_statcast AS (
 
 SELECT 
    pitch_type
@@ -40,7 +40,17 @@ SELECT
   ,stand                           
   ,p_throws                        
   ,home_team                       
-  ,away_team                       
+  ,away_team
+  ,CASE WHEN inning_topbot = 'Top'
+        THEN away_team
+        WHEN inning_topbot = 'Bot'
+        THEN home_team
+        END AS batting_team
+  ,CASE WHEN inning_topbot = 'Top'
+        THEN home_team
+        WHEN inning_topbot = 'Bot'
+        THEN away_team
+        END AS fielding_team                    
   ,type                            
   ,hit_location                    
   ,bb_type                               
@@ -247,3 +257,9 @@ SELECT
         ELSE NULL
         END AS twenty_fifth_pitch
 FROM cte_raw_statcast
+),
+cte_final AS (
+  SELECT * FROM cte_base_statcast
+)
+
+SELECT * FROM cte_final

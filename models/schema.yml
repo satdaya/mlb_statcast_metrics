@@ -377,6 +377,16 @@ models:
         tests:
           - accepted_values:
               values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+      - name: batting_team
+        description: 3 digit abbreviation of team batting
+        tests:
+          - accepted_values:
+              values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
+      - name: pitching_team
+        description: 3 digit abbreviation of team pitching
+        tests:
+          - accepted_values:
+              values: ['LAD', 'COL', 'SF', 'ARI', 'SD', 'CHC', 'PIT', 'MIL', 'CIN', 'NYM', 'PHI', 'MIA', 'ATL', 'WSH', 'NYY', 'BOS', 'TOR', 'TB', 'BAL', 'MIN', 'DET', 'KC', 'CLE', 'DET', 'CWS', 'LAA', 'OAK', 'SEA', 'HOU', 'TEX']
       - name: type
         description: Short hand of pitch result. B = ball, S = strike, X = in play.
         tests:
