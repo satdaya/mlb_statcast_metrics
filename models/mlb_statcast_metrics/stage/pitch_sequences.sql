@@ -8,7 +8,10 @@
 
 WITH cte_base_statcast AS (
   SELECT * FROM {{ref('base_statcast')}}
-  ),
+),
+cte_statcast_events AS (
+  SELECT * FROM {{ref('statcast_events')}}
+),
 cte_pitch_number AS (
   SELECT
      game_pk
@@ -122,6 +125,15 @@ cte_condensed AS (
     ,batter_full_name
     ,pn.inning
     ,o.outcome
+    ,se.is_ab AS is_at_bat
+    ,se.is_ab_bool AS is_at_bat_bool
+    ,se.ab_safe_or_out AS ab_safe_or_out
+    ,se.ab_safe_or_out_bool AS ab_safe_or_out_bool
+    ,se.is_pa AS is_plate_appearance
+    ,se.is_pa_bool AS is_plate_appearance_bool
+    ,se.pa_safe_or_out AS pa_safe_or_out
+    ,se.pa_safe_or_out_bool AS pa_safe_or_out_bool
+    ,se.bases_for_slg
     ,IFNULL(MAX(first_pitch), '' ) AS first_pitch
     ,IFNULL(MAX(second_pitch), '' ) AS second_pitch
     ,IFNULL(MAX(third_pitch), '' ) AS third_pitch
@@ -150,7 +162,9 @@ cte_condensed AS (
   FROM cte_pitch_number pn
   JOIN cte_outcome o
     ON pn.plt_apprnc_pk = o.plt_apprnc_pk
-  GROUP BY 1,2,3,4,5,6,7,8
+  JOIN cte_statcast_events se
+    ON o.outcome = se._events
+  GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
 ),
 cte_pitch_sequence AS (
   SELECT *
