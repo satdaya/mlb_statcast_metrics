@@ -7,6 +7,8 @@
 
 WITH cte_base_statcast AS (
   SELECT * FROM {{ref('base_statcast')}}
+),cte_statcast_events AS (
+  SELECT * FROM {{ref('statcast_events')}}
 ),cte_pitch_sequence AS (
   SELECT
      game_pk
@@ -14,6 +16,8 @@ WITH cte_base_statcast AS (
     ,pitcher_full_name
     ,batter_id
     ,batter_full_name
+    ,batting_team
+    ,fielding_team
     ,inning
     ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
     ,first_pitch
@@ -52,116 +56,67 @@ cte_batting_metrics AS (
   ,pitcher_full_name
   ,batter_id
   ,batter_full_name
-  ,CASE WHEN inning_topbot = 'Top'
-        THEN away_team
-        WHEN inning_topbot = 'Bot'
-        THEN home_team
-        END AS batting_team
-  ,CASE WHEN inning_topbot = 'Top'
-        THEN home_team
-        WHEN inning_topbot = 'Bot'
-        THEN away_team
-        END AS fielding_team
+  ,batting_team
+  ,fielding_team
   ,inning
   ,fld_score AS fielding_team_score
   ,bat_score AS batting_score
   ,hit_distance_sc
   ,pitch_number AS pitch_count_in_pa
-  ,_events
+  ,bs._events
   ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
-  ,CASE WHEN _events ILIKE ('%pickoff%')
-        THEN 0
-        WHEN _events ILIKE ('%steal%')
-        THEN 0
-        WHEN _events ILIKE ('%stolen%')
-        THEN 0
-        WHEN _events ILIKE ('%advisory%')
-        THEN 0
-        WHEN _events ILIKE ('%interf%')
-        THEN 0
-        WHEN _events = 'passed_ball'
-        THEN 0
-        WHEN _events = 'wild_pitch'
-        THEN 0
-        WHEN _events IS NULL
-        THEN 0
-        ELSE 1
-        END AS is_plate_appearance
-  ,CASE WHEN _events IN ('single', 'double', 'triple', 'home_run', 'grounded_into_double_play', 'fielders_choice_out', 'triple_play')
-        THEN 1
-        WHEN _events ILIKE ('%double_play%')
-        THEN 1
-        WHEN _events ILIKE ('%bunt%')
-        THEN 1
-        WHEN _events ILIKE ('%out%')
-        THEN 1
-        WHEN _events ILIKE ('%sac_fly%')
-        THEN 1
-        WHEN _events ILIKE ('%field_error%')
-        THEN 1
-        ELSE 0 END
-        AS is_at_bat
-  ,CASE WHEN is_at_bat = 1
-        AND _events IN ('single', 'double', 'triple', 'home_run')
-        THEN 1
-        ELSE 0
-        END AS ab_safe_or_out
-  ,CASE WHEN is_plate_appearance = 1
-        AND _events IN ('single', 'double', 'triple', 'home_run', 'hit_by_pitch', 'catcher_interf', 'fan_interference', 'walk')
-        THEN 1
-        ELSE 0
-        END AS pa_safe_or_out
-  ,CASE WHEN _events = 'single'
-        THEN 1
-        WHEN _events = 'double'
-        THEN 2
-        WHEN _events = 'triple'
-        THEN 3
-        WHEN _events = 'home_run'
-        THEN 4
-        ELSE 0
-        END AS bases_for_slg
-  ,CASE WHEN _events = 'hit_by_pitch'
+  ,se.is_ab AS is_at_bat
+  ,se.is_ab_bool AS is_at_bat_bool
+  ,se.ab_safe_or_out AS ab_safe_or_out
+  ,se.ab_safe_or_out_bool AS ab_safe_or_out_bool
+  ,se.is_pa AS is_plate_appearance
+  ,se.is_pa_bool AS is_plate_appearance_bool
+  ,se.pa_safe_or_out AS pa_safe_or_out
+  ,se.pa_safe_or_out_bool AS pa_safe_or_out_bool
+  ,se.bases_for_slg
+  ,CASE WHEN bs._events = 'hit_by_pitch'
         THEN 1
         ELSE 0 
         END AS hbp
-  ,CASE WHEN _events = 'walk'
+  ,CASE WHEN bs._events = 'walk'
         THEN 1
         ELSE 0
         END AS walk
-  ,CASE WHEN _events = 'intentional_walk'
+  ,CASE WHEN bs._events = 'intentional_walk'
         THEN 1
         ELSE 0
         END AS ibb
-  ,CASE WHEN _events = 'single'
+  ,CASE WHEN bs._events = 'single'
         THEN 1
         ELSE 0
         END AS single
-  ,CASE WHEN _events = 'double'
+  ,CASE WHEN bs._events = 'double'
         THEN 1
         ELSE 0
         END AS double
-  ,CASE WHEN _events = 'triple'
+  ,CASE WHEN bs._events = 'triple'
         THEN 1
         ELSE 0 
         END AS triple
-  ,CASE WHEN _events = 'home_run'
+  ,CASE WHEN bs._events = 'home_run'
         THEN 1
         ELSE 0 
         END AS home_run
-  ,CASE WHEN _events ILIKE ('%sac%')
+  ,CASE WHEN bs._events ILIKE ('%sac%')
         THEN 1
         ELSE 0 
         END AS sf
-  ,CASE WHEN _events ILIKE ('%strikeout%')
+  ,CASE WHEN bs._events ILIKE ('%strikeout%')
         THEN 1
         ELSE 0 
         END AS strikeout
   ,MAX(pitch_number) AS no_of_pitches
-FROM cte_base_statcast
-WHERE _events IS NOT NULL
-  AND _events NOT IN ('wild_pitch', 'passed_ball')
-GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
+FROM cte_base_statcast bs
+JOIN cte_statcast_events se
+  ON bs._events = se._events
+WHERE bs._events IS NOT NULL
+  AND bs._events NOT IN ('wild_pitch', 'passed_ball')
+GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
 ),
 cte_final AS (
   SELECT *
