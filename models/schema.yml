@@ -305,6 +305,23 @@ seeds:
         description: boolean determining whether the batter was safe or out in a pa
       - name: bases_for_slg
         description: determining the number of bases taken in an ab
+  - name: pitch_types
+    description: pitch types as they come in thru statcast. This is included to standardize pitch_types thru changes in the naming conventions.
+    columns: 
+      - name: pitch_type
+        description: statcast raw pitch_type data
+      - name: pitch_type_new
+        description: standardized pitch_type data
+      - name: pitch_type_new_name
+        description: non-abbreviated standardized pitch_type name
+      - name: pitch_type_cond_lvi
+        description: first level classification. four-seamers and two-seamers are categorized as fastballs. curve, knuckle-curve, slow-curve are classified as curveballs.
+      - name: pitch_type_cond_lvi_name
+        description: non-abbreviated first level classification
+      - name: pitch_type_cond_lvii
+        description: second level classification. all pitch types consolidated into fastball, breaking ball, offspeed, pitch out
+      - name: pitch_type_cond_lvii_name
+        description: second level classification. all pitch types consolidated into fastball, breaking ball, offspeed, pitch out
         
 
 models:

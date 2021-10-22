@@ -1,0 +1,17 @@
+﻿pitch_type,pitch_type_new,pitch_type_new_name,pitch_type_cond_lvi,pitch_type_cond_lvi_name,pitch_type_cond_lvii,pitch_type_cond__lvii_name
+CU,cu,curveball,cu,curveball,br,breaking_ball
+SL,sl,slider,sl,slider,br,breaking_ball
+SI,si,sinker,fb,fastball,fb,fastball
+FO,fo,forkball,fo,forkball,br,breaking_ball
+CS,cu,curveball,cu,slow-curve,br,breaking_ball
+CH,ch,changeup,ch,changeup,ch,off-speed
+KN,kn,knuckleball,kn,kn,kn,knuckleball
+EP,ep,eephus,ep,ep,of,off-speed
+KC,kc,knuckle-curve,cu,curveball,br,breaking_ball
+SC,sc,screwball,sc,sc,br,breaking_ball
+FA,ff,four-seam,fb,fastball,fb,fastball
+FF,ff,four-seam,fb,fastball,fb,fastball
+FT,ft,two-seam,fb,fastball,fb,fastball
+FC,cu,cutter,cu,cutter,fb,fastball
+PO,po,pitch out,po,pitch out,po,pitch_out
+FS,sp,splitter,sp,splitter,fb,fastball
