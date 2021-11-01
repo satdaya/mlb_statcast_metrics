@@ -20,31 +20,6 @@ WITH cte_base_statcast AS (
     ,fielding_team
     ,inning
     ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
-    ,first_pitch
-    ,second_pitch
-    ,third_pitch
-    ,fourth_pitch
-    ,fifth_pitch
-    ,sixth_pitch
-    ,seventh_pitch
-    ,eighth_pitch
-    ,ninth_pitch
-    ,tenth_pitch
-    ,eleventh_pitch
-    ,twelfth_pitch
-    ,thirteenth_pitch
-    ,fourteenth_pitch
-    ,fifteenth_pitch
-    ,sixteenth_pitch
-    ,seventeenth_pitch
-    ,eighteenth_pitch
-    ,nineteenth_pitch
-    ,twentieth_pitch
-    ,twenty_first_pitch
-    ,twenty_second_pitch
-    ,twenty_third_pitch
-    ,twenty_fourth_pitch
-    ,twenty_fifth_pitch
   FROM cte_base_statcast
 ),
 cte_batting_metrics AS (
@@ -61,8 +36,7 @@ cte_batting_metrics AS (
   ,inning
   ,fld_score AS fielding_team_score
   ,bat_score AS batting_score
-  ,hit_distance_sc
-  ,pitch_number AS pitch_count_in_pa
+  ,hit_distance_sc AS hit_distance
   ,bs._events
   ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
   ,se.is_ab AS is_at_bat

@@ -13,8 +13,8 @@ cte_counts AS (
     DISTINCT batter_id
    ,batter_full_name
    ,game_year
-   ,SUM(is_plate_appearance) AS pa
-   ,SUM(is_at_bat) AS ab
+   ,SUM(is_plate_appearance_bool) AS pa
+   ,SUM(is_at_bat_bool) AS ab
    ,( SUM(single) + SUM(double) + SUM(triple) + SUM(home_run) ) AS hit
    ,SUM(hbp) AS hit_by_pitch
    ,SUM(walk) AS walk

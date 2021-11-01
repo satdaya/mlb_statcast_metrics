@@ -21,83 +21,83 @@ cte_pitch_number AS (
     ,batter_full_name
     ,inning
     ,pitch_number
-    ,pitch_type
+    ,pitch_type_cond_lvi
     ,_events
     ,game_pk || pitcher_id || batter_id || inning  AS plt_apprnc_pk
     ,MAX(CASE WHEN pitch_number = 1 
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS first_pitch 
     ,MAX(CASE WHEN pitch_number = 2
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS second_pitch 
     ,MAX(CASE WHEN pitch_number = 3 
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS third_pitch 
     ,MAX(CASE WHEN pitch_number = 4
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS fourth_pitch  
     ,MAX(CASE WHEN pitch_number = 5
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS fifth_pitch   
     ,MAX(CASE WHEN pitch_number = 6
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS sixth_pitch  
     ,MAX(CASE WHEN pitch_number = 7
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS seventh_pitch 
     ,MAX(CASE WHEN pitch_number = 8
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS eighth_pitch
     ,MAX(CASE WHEN pitch_number = 9
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS ninth_pitch
     ,MAX(CASE WHEN pitch_number = 10
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS tenth_pitch
     ,MAX(CASE WHEN pitch_number = 11
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS eleventh_pitch
     ,MAX(CASE WHEN pitch_number = 12
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS twelfth_pitch
     ,MAX(CASE WHEN pitch_number = 13
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS thirteenth_pitch
     ,MAX(CASE WHEN pitch_number = 14
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS fourteenth_pitch
     ,MAX(CASE WHEN pitch_number = 15
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS fifteenth_pitch
     ,MAX(CASE WHEN pitch_number = 16
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS sixteenth_pitch
     ,MAX(CASE WHEN pitch_number = 17
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS seventeenth_pitch
     ,MAX(CASE WHEN pitch_number = 18
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS eighteenth_pitch
     ,MAX(CASE WHEN pitch_number = 19
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS nineteenth_pitch
     ,MAX(CASE WHEN pitch_number = 20
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS twentieth_pitch
     ,MAX(CASE WHEN pitch_number = 21
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS twenty_first_pitch
     ,MAX(CASE WHEN pitch_number = 22
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS twenty_second_pitch
     ,MAX(CASE WHEN pitch_number = 23
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS twenty_third_pitch
     ,MAX(CASE WHEN pitch_number = 24
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS twenty_fourth_pitch
     ,MAX(CASE WHEN pitch_number = 25
-              THEN pitch_type
+              THEN pitch_type_cond_lvi
               END) AS twenty_fifth_pitch
   FROM cte_base_statcast
   GROUP BY 1,2,3,4,5,6,7,8,9
