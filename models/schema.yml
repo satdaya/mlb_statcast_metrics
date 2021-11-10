@@ -584,6 +584,8 @@ models:
         description: primary key. concat of pitcher, batter, at_bat_number, pitch_number, game_pk
         tests:
           - unique
+      - name:  plt_apprnc_pk
+        description: primary key of multiple tables within model. game_pk || pitcher_id || batter_id || inning
       - name: horizontal_loc
         description: relation of the ball to the batter on the horizontal plane
         tests:
