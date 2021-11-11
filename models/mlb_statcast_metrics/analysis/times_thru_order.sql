@@ -2,11 +2,12 @@
     config(
       materialized= 'table',
       unique_key= 'tab_pk'
+
     )
 }}
 
 WITH cte_pitchers_time_thru_order AS (
-  SELECT * FROM pitchers_time_thru_order
+  SELECT * FROM {{ref('pitchers_time_thru_order')}}
 ),
 cte_remove_individual_pitchers AS (
   SELECT
@@ -37,7 +38,7 @@ cte_consolidation AS (
     ,MAX(br_x_axis_movement) AS br_x_axis_movement
     ,MAX(br_z_axis_movement) AS br_z_axis_movement
   FROM cte_remove_individual_pitchers
-  GROUP BY 1,2
+  GROUP BY 1,2,3
   ORDER BY 1,2
 ),
 cte_final AS (

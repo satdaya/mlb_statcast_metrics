@@ -10,7 +10,7 @@ WITH cte_pitch_sequence AS (
 ),
 cte_distinct_pitch_sequence AS (
   SELECT
-    pitch_sequence AS dist_pitch_seq
+     pitch_sequence AS dist_pitch_seq
     ,COUNT (dist_pitch_seq) AS sum_sequence_used
     ,CASE WHEN SUM(is_at_bat_bool) = 0
           THEN NULL
