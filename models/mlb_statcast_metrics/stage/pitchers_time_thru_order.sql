@@ -1,3 +1,10 @@
+{{
+    config(
+      materialized= 'table',
+      unique_key= 'tab_pk'
+    )
+}}
+
 WITH cte_base_statcast AS (
   SELECT * FROM {{ref('base_statcast')}}
 ),
@@ -108,6 +115,7 @@ cte_consolidation AS (
    ,pitcher_full_name
    ,_year
    ,times_thru_order
+   ,pitcher_id || _year || times_thru_order AS tab_pk
    ,MAX(fb_velo) AS fb_velo
    ,MAX(fb_spin_rate) AS fb_spin_rate
    ,MAX(fb_x_axis_movement) AS fb_x_axis_movement
