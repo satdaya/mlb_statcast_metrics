@@ -6,7 +6,7 @@
 }}
 
 WITH cte_innings_block AS (
-  SELECT * FROM innings_block
+  SELECT * FROM {{ref('innings_block')}}
 ), cte_metrics AS (
   SELECT
      _year

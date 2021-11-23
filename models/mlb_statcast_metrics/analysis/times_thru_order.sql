@@ -17,7 +17,6 @@ cte_remove_individual_pitchers AS (
     ,AVG(fb_spin_rate) AS fb_spin_rate
     ,AVG(fb_x_axis_movement) AS fb_x_axis_movement
     ,AVG(fb_z_axis_movement) AS fb_z_axis_movement
-    ,AVG(br_velo) AS br_velo
     ,AVG(br_spin_rate) AS br_spin_rate
     ,AVG(br_x_axis_movement) AS br_x_axis_movement
     ,AVG(br_z_axis_movement) AS br_z_axis_movement
@@ -33,7 +32,6 @@ cte_consolidation AS (
     ,MAX(fb_spin_rate) AS fb_spin_rate
     ,MAX(fb_x_axis_movement) AS fb_x_axis_movement
     ,MAX(fb_z_axis_movement) AS fb_z_axis_movement
-    ,MAX(br_velo) AS br_velo
     ,MAX(br_spin_rate) AS br_spin_rate
     ,MAX(br_x_axis_movement) AS br_x_axis_movement
     ,MAX(br_z_axis_movement) AS br_z_axis_movement

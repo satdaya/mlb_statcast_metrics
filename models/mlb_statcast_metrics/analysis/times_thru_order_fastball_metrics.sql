@@ -7,7 +7,7 @@
 }}
 
 WITH cte_times_thru_order AS (
-  SELECT * FROM times_thru_order
+  SELECT * FROM {{ref('times_thru_order')}}
 ), cte_metrics AS (
   SELECT
      _year
