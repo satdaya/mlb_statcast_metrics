@@ -37,10 +37,7 @@ cte_pa AS (
      ON cte_base_statcast._events = cte_statcast_events._events
    WHERE outcome IS NOT NULL
    ORDER BY 3,6,2
-), /*
-SELECT * FROM cte_pa
-ORDER BY 12 DESC
-*/
+), 
 cte_innings_partitions AS (
   SELECT
     plt_apprnc_pk
@@ -162,33 +159,12 @@ cte_variance AS (
     ,inning_block
     ,pitcher_id || _year || inning_block AS tab_pk
     ,fb_velo
-    //,fb_velo - LAG(fb_velo, 1) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_velo_from_1st_time_thru_order
-    //,fb_velo - LAG(fb_velo, 2) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_velo_from_2nd_time_thru_order
-    //,fb_velo - LAG(fb_velo, 3) OVER (PARTITION BY pitcher_id, _year  ORDER BY inning_block) AS var_fb_velo_from_3rd_time_thru_order/
     ,fb_spin_rate
-    //,fb_spin_rate - LAG(fb_spin_rate, 1) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_1st_time_thru_order
-    //,fb_spin_rate - LAG(fb_spin_rate, 2) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_2nd_time_thru_order
-    //,fb_spin_rate - LAG(fb_spin_rate, 3) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_3rd_time_thru_order
     ,fb_x_axis_movement
-    //,fb_x_axis_movement - LAG(fb_x_axis_movement, 1) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_1st_time_thru_order
-    //,fb_x_axis_movement - LAG(fb_x_axis_movement, 2) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_2nd_time_thru_order
-    //,fb_x_axis_movement - LAG(fb_x_axis_movement, 3) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_3rd_time_thru_order
     ,fb_z_axis_movement
-    //,fb_z_axis_movement - LAG(fb_z_axis_movement, 1) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_1st_time_thru_order
-    //,fb_z_axis_movement - LAG(fb_z_axis_movement, 2) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_2nd_time_thru_order
-    //,fb_z_axis_movement - LAG(fb_z_axis_movement, 3) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_fb_spin_rate_from_3rd_time_thru_order
     ,br_spin_rate
-    //,br_spin_rate - LAG(br_spin_rate, 1) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_1st_time_thru_order
-    //,br_spin_rate - LAG(br_spin_rate, 2) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_2nd_time_thru_order
-    //,br_spin_rate - LAG(br_spin_rate, 3) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_3rd_time_thru_order
     ,br_x_axis_movement
-    //,br_x_axis_movement - LAG(br_x_axis_movement, 1) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_1st_time_thru_order
-    //,br_x_axis_movement - LAG(br_x_axis_movement, 2) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_2nd_time_thru_order
-    //,br_x_axis_movement - LAG(br_x_axis_movement, 3) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_3rd_time_thru_order
     ,br_z_axis_movement
-    //,br_z_axis_movement - LAG(br_z_axis_movement, 1) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_1st_time_thru_order
-    //,br_z_axis_movement - LAG(br_z_axis_movement, 2) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_2nd_time_thru_order
-   // ,br_z_axis_movement - LAG(br_z_axis_movement, 3) OVER (PARTITION BY pitcher_id, _year ORDER BY inning_block) AS var_br_spin_rate_from_3rd_time_thru_order
   FROM cte_consolidation
   ORDER BY 1,3,4
   ),
