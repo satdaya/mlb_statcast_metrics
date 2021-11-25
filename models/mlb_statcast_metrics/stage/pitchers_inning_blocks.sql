@@ -6,13 +6,13 @@
 }}
 
 WITH cte_base_statcast AS (
-  SELECT * FROM base_statcast
+  SELECT * FROM {{ref('base_statcast')}}
 ),
 cte_statcast_events AS (
-  SELECT * FROM statcast_events
+  SELECT * FROM {{ref('statcast_events')}}
 ),
 cte_pitch_types AS (
-  SELECT * FROM pitch_types
+  SELECT * FROM {{ref('pitch_types')}}
 ),
 cte_pa AS (
   SELECT
