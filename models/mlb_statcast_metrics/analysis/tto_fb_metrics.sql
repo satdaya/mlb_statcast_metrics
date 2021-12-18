@@ -34,4 +34,4 @@ WITH cte_times_thru_order AS (
 cte_final AS (
   SELECT * FROM cte_metrics
 )
-SELECT * FROM cte_finals
+SELECT * FROM cte_final
