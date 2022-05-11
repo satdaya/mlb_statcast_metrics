@@ -6,13 +6,13 @@
     )
 }}
 
-with cte_base_statcast as (
+with _base_statcast as (
   select * from {{ref('base_statcast')}}
 ),
-cte_statcast_events as (
+_statcast_events as (
   select * from {{ref('statcast_events')}}
 ),
-cte_pitch_number as (
+_pitch_number as (
   select
      game_pk
     ,pitcher_id
@@ -99,10 +99,10 @@ cte_pitch_number as (
     ,max(case when pitch_number = 25
               then pitch_type_cond_lvi
               end) as twenty_fifth_pitch
-  from cte_base_statcast
+  from _base_statcast
   group by 1,2,3,4,5,6,7,8,9
   ),
-cte_outcome as (
+_outcome as (
   select
      game_pk
     ,pitcher_id
@@ -115,7 +115,7 @@ cte_outcome as (
   from base_statcast
   where _events is not null
    ),
-cte_condensed as (
+_condensed as (
   select
     DISTINCT pn.plt_apprnc_pk
     ,pn.game_pk
@@ -159,23 +159,23 @@ cte_condensed as (
     ,ifnull(max(twenty_third_pitch), '' ) as twenty_third_pitch
     ,ifnull(max(twenty_fourth_pitch), '' ) as twenty_fourth_pitch
     ,ifnull(max(twenty_fifth_pitch), '' ) as twenty_fifth_pitch
-  from cte_pitch_number pn
-  join cte_outcome o
+  from _pitch_number pn
+  join _outcome o
     on pn.plt_apprnc_pk = o.plt_apprnc_pk
-  join cte_statcast_events se
+  join _statcast_events se
     on o.outcome = se._events
   group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
 ),
-cte_pitch_sequence as (
+_pitch_sequence as (
   select *
       ,rtrim( (first_pitch || ' - ' || second_pitch ||  ' - ' || third_pitch ||  ' - ' || fourth_pitch ||  ' - ' || fifth_pitch ||  ' - ' || sixth_pitch ||
       ' - ' || seventh_pitch  || ' - ' || eighth_pitch  ||  ' - ' || ninth_pitch ||  ' - ' || tenth_pitch ||' - ' || eleventh_pitch || ' - ' ||  twelfth_pitch || 
       ' - ' || thirteenth_pitch  ||  ' - ' || fourteenth_pitch ||  ' - ' || fifteenth_pitch || ' - ' ||  sixteenth_pitch ||  ' - ' || seventeenth_pitch || 
       ' - ' || eighteenth_pitch  ||  ' - ' || nineteenth_pitch ||  ' - ' || twentieth_pitch ||  ' - ' || twenty_first_pitch ||  ' - ' || twenty_second_pitch ||
       ' - ' || twenty_third_pitch ||  ' - ' || twenty_fourth_pitch ||  ' - ' || twenty_fifth_pitch ), ' - ' ) as pitch_sequence
-    from cte_condensed
+    from _condensed
 ),
-cte_final as (
-  select * from cte_pitch_sequence
+_final as (
+  select * from _pitch_sequence
 )  
-select * from cte_final
+select * from _final

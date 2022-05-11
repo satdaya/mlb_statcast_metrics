@@ -5,58 +5,58 @@
     )
 }}
 
-WITH cte_base_statcast AS (
-  SELECT * FROM {{ref('base_statcast')}}
+with _base_statcast as (
+  select * from {{ref('base_statcast')}}
 ),
-cte_statcast_events AS (
-  SELECT * FROM {{ref('statcast_events')}}
+_statcast_events as (
+  select * from {{ref('statcast_events')}}
 ),
-cte_pitch_types AS (
-  SELECT * FROM {{ref('pitch_types')}}
+_pitch_types as (
+  select * from {{ref('pitch_types')}}
 ),
-cte_pa AS (
-  SELECT
-    game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
+_pa as (
+  select
+    game_pk || pitcher_id || batter_id || inning as plt_apprnc_pk
    ,pitcher_id
    ,game_pk
    ,inning
    ,at_bat_number
-   ,CASE WHEN _events IS NOT NULL
-         THEN _events
-         END AS outcome
-   FROM cte_base_statcast
+   ,case when _events is not null
+         then _events
+         end as outcome
+   from _base_statcast
 ),
-cte_num_batter AS (
-  SELECT
-    DISTINCT plt_apprnc_pk
-   ,DENSE_RANK() OVER (PARTITION BY pitcher_id, game_pk ORDER BY inning, at_bat_number) AS num_of_batters
-FROM cte_pa
-JOIN cte_statcast_events
-  ON cte_pa.outcome = cte_statcast_events._events
-WHERE outcome IS NOT NULL
+_num_batter as (
+  select
+    distinct plt_apprnc_pk
+   ,dense_rank() over (partition by pitcher_id, game_pk order by inning, at_bat_number) as num_of_batters
+from _pa
+join _statcast_events
+  on _pa.outcome = _statcast_events._events
+where outcome is not null
 ),
-cte_times_thru_the_order AS (
-  SELECT
-   DISTINCT plt_apprnc_pk
+_times_thru_the_order as (
+  select
+   distinct plt_apprnc_pk
   ,num_of_batters
-  ,CASE WHEN num_of_batters BETWEEN 1 AND 9
-        THEN 1
-        WHEN num_of_batters BETWEEN 10 AND 18
-        THEN 2
-        WHEN num_of_batters BETWEEN 19 AND 27
-        THEN 3
-        WHEN num_of_batters BETWEEN 28 AND 36
-        THEN 4
-        WHEN num_of_batters BETWEEN 37 AND 45
-        THEN 5
-        END AS times_thru_order
-  FROM cte_num_batter
+  ,case when num_of_batters between 1 and 9
+        then 1
+        when num_of_batters between 10 and 18
+        then 2
+        when num_of_batters between 19 and 27
+        then 3
+        when num_of_batters between 28 and 36
+        then 4
+        when num_of_batters between 37 and 45
+        then 5
+        end as times_thru_order
+  from _num_batter
 ),
-cte_time_thru_the_order_stats AS (
-  SELECT
+_time_thru_the_order_stats as (
+  select
     a.plt_apprnc_pk
    ,a.game_pk
-   ,YEAR(a.gm_date) AS _year
+   ,year(a.gm_date) as _year
    ,gm_date
    ,pitcher_id
    ,pitcher_full_name
@@ -71,70 +71,70 @@ cte_time_thru_the_order_stats AS (
    ,release_spin_rate
    ,pfx_x
    ,pfx_z
-  FROM cte_base_statcast a
-  JOIN cte_times_thru_the_order b
-    ON a.plt_apprnc_pk = b.plt_apprnc_pk
+  from _base_statcast a
+  join _times_thru_the_order b
+    on a.plt_apprnc_pk = b.plt_apprnc_pk
 ),
-cte_avg AS (
-  SELECT
+_avg as (
+  select
     pitcher_id
    ,pitcher_full_name
    ,_year
    ,times_thru_order
    ,pitch_type_cond_lvii
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(release_speed)
-         END AS fb_velo
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(release_spin_rate)
-         END AS fb_spin_rate
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(pfx_x)
-         END AS fb_x_axis_movement
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(pfx_z)
-         END AS fb_z_axis_movement
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(release_speed)
-         END AS br_velo
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(release_spin_rate)
-         END AS br_spin_rate
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(pfx_x)
-         END AS br_x_axis_movement
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(pfx_z)
-         END AS br_z_axis_movement
-  FROM cte_time_thru_the_order_stats
-  GROUP BY 1,2,3,4,5
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(release_speed)
+         end as fb_velo
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(release_spin_rate)
+         end as fb_spin_rate
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(pfx_x)
+         end as fb_x_axis_movement
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(pfx_z)
+         end as fb_z_axis_movement
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(release_speed)
+         end as br_velo
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(release_spin_rate)
+         end as br_spin_rate
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(pfx_x)
+         end as br_x_axis_movement
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(pfx_z)
+         end as br_z_axis_movement
+  from _time_thru_the_order_stats
+  group by 1,2,3,4,5
 ),
-cte_consolidation AS (
-  SELECT
+_consolidation as (
+  select
     pitcher_id
    ,pitcher_full_name
    ,_year
    ,times_thru_order
-   ,pitcher_id || _year || times_thru_order AS tab_pk
-   ,ROUND ( MAX(fb_velo), 2) AS fb_velo
-   ,ROUND ( MAX(fb_spin_rate), 2) AS fb_spin_rate
-   ,ROUND ( MAX(fb_x_axis_movement), 2) AS fb_x_axis_movement
-   ,ROUND ( MAX(fb_z_axis_movement), 2) AS fb_z_axis_movement
-   ,ROUND ( MAX(br_velo), 2) AS br_velo
-   ,ROUND ( MAX(br_spin_rate), 2) AS br_spin_rate
-   ,ROUND ( MAX(br_x_axis_movement), 2) AS br_x_axis_movement
-   ,ROUND ( MAX(br_z_axis_movement), 2) AS br_z_axis_movement
-  FROM cte_avg
-  GROUP BY 1,2,3,4
-  ORDER BY 1,3,4
+   ,pitcher_id || _year || times_thru_order as tab_pk
+   ,round ( max(fb_velo), 2) as fb_velo
+   ,round ( max(fb_spin_rate), 2) as fb_spin_rate
+   ,round ( max(fb_x_axis_movement), 2) as fb_x_axis_movement
+   ,round ( max(fb_z_axis_movement), 2) as fb_z_axis_movement
+   ,round ( max(br_velo), 2) as br_velo
+   ,round ( max(br_spin_rate), 2) as br_spin_rate
+   ,round ( max(br_x_axis_movement), 2) as br_x_axis_movement
+   ,round ( max(br_z_axis_movement), 2) as br_z_axis_movement
+  from _avg
+  group by 1,2,3,4
+  order by 1,3,4
 ),
-cte_variance AS (
-  SELECT
+_variance as (
+  select
      pitcher_id
     ,pitcher_full_name
     ,_year
     ,times_thru_order
-    ,pitcher_id || _year || times_thru_order AS tab_pk
+    ,pitcher_id || _year || times_thru_order as tab_pk
     ,fb_velo
     ,fb_spin_rate
     ,fb_x_axis_movement
@@ -142,9 +142,9 @@ cte_variance AS (
     ,br_spin_rate
     ,br_x_axis_movement
     ,br_z_axis_movement
-  FROM cte_consolidation
+  from _consolidation
   ),
-cte_final AS (
-  SELECT * FROM cte_variance
+_final as (
+  select * from _variance
   )
-SELECT * FROM cte_final
+select * from _final

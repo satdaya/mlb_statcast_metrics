@@ -5,52 +5,52 @@
     )
 }}
 
-WITH cte_base_statcast AS (
-  SELECT * FROM {{ref('base_statcast')}}
+with _base_statcast as (
+  select * from {{ref('base_statcast')}}
 ),
-cte_home_game AS (
-  SELECT
-    DISTINCT game_pk AS game_pk
-   ,home_team AS team
-   ,away_team AS opponent
+_home_game as (
+  select
+    distinct game_pk as game_pk
+   ,home_team as team
+   ,away_team as opponent
    ,gm_date
    ,game_year
-  FROM cte_base_statcast
+  from _base_statcast
   ),
-cte_away_game AS (
-  SELECT
-    DISTINCT game_pk AS game_pk
-   ,away_team AS team
-   ,home_team AS opponent
+_away_game as (
+  select
+    distinct game_pk as game_pk
+   ,away_team as team
+   ,home_team as opponent
    ,gm_date
    ,game_year
-  FROM cte_base_statcast
+  from _base_statcast
   ),
-cte_stack AS (
-  SELECT * 
-  FROM cte_home_game
+_stack as (
+  select * 
+  from _home_game
   
-  UNION ALL
+  union all
   
-  SELECT *
-  FROM cte_away_game
+  select *
+  from _away_game
   ),
-cte_count AS (
-  SELECT
+_count as (
+  select
     *
-   ,COUNT(game_pk) OVER (PARTITION BY team, game_year ORDER BY gm_date) AS game_count
-  FROM cte_stack
+   ,count(game_pk) over (partition by team, game_year order by gm_date) as game_count
+  from _stack
   ),
-cte_yearly_count AS (
-  SELECT
+_yearly_count as (
+  select
     game_year
    ,team
-   ,MAX(game_count) AS yearly_game_count
-  FROM cte_count
-  GROUP BY 1,2
+   ,max(game_count) as yearly_game_count
+  from _count
+  group by 1,2
   ),
-cte_final AS (
-SELECT
+_final as (
+select
    c.game_pk
   ,c.team
   ,c.opponent
@@ -59,10 +59,10 @@ SELECT
   ,c.game_count
   ,y.yearly_game_count
   ,c.game_pk || c.team as comp_key
-FROM cte_count c
-JOIN cte_yearly_count y
-  ON c.game_year = y.game_year
- AND c.team = y.team
+from _count c
+join _yearly_count y
+  on c.game_year = y.game_year
+ and c.team = y.team
   )
   
-SELECT * FROM cte_final
+select * from _final

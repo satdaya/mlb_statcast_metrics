@@ -5,35 +5,35 @@
     )
 }}
 
-WITH cte_plate_appearance AS (
-  SELECT * FROM {{ref('stg_plate_appearance')}}
+with _plate_appearance as (
+  select * from {{ref('stg_plate_appearance')}}
   ),
-cte_game_count AS (
-  SELECT * FROM {{ref('stg_game_count')}}
+_game_count as (
+  select * from {{ref('stg_game_count')}}
   ),
-cte_strikeouts AS (
-  SELECT
-     DISTINCT batter_id
+_strikeouts as (
+  select
+     distinct batter_id
     ,batter_full_name
     ,gm_date
     ,game_year
-    ,SUM(strikeout) OVER (PARTITION BY batter_id, game_year ORDER BY gm_date) AS running_count
-  FROM cte_plate_appearance
+    ,sum(strikeout) over (partition by batter_id, game_year order by gm_date) as running_count
+  from _plate_appearance
   ),
-cte_first_to_hundred AS (
-  SELECT
+_first_to_hundred as (
+  select
     batter_id
    ,batter_full_name
    ,game_year
-   ,MIN(gm_date) AS date_to_100_k
-  FROM cte_strikeouts
-  WHERE running_count = 100
-  GROUP BY 1,2,3
-  ORDER BY 4 DESC
+   ,min(gm_date) as date_to_100_k
+  from _strikeouts
+  where running_count = 100
+  group by 1,2,3
+  order by 4 desc
   ),
-cte_final AS (
-  SELECT * FROM cte_first_to_hundred
+_final as (
+  select * from _first_to_hundred
   )
 
-SELECT * FROM cte_final
-ORDER BY 4
+select * from _final
+order by 4

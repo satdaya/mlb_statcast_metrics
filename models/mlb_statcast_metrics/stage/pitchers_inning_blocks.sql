@@ -5,17 +5,17 @@
     )
 }}
 
-WITH cte_base_statcast AS (
-  SELECT * FROM {{ref('base_statcast')}}
+with _base_statcast AS (
+  select * from {{ref('base_statcast')}}
 ),
-cte_statcast_events AS (
-  SELECT * FROM {{ref('statcast_events')}}
+_statcast_events AS (
+  select * from {{ref('statcast_events')}}
 ),
-cte_pitch_types AS (
-  SELECT * FROM {{ref('pitch_types')}}
+_pitch_types AS (
+  select * from {{ref('pitch_types')}}
 ),
-cte_pa AS (
-  SELECT
+_pa AS (
+  select
     game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
    ,pitcher_id
    ,pitcher_full_name
@@ -25,21 +25,21 @@ cte_pa AS (
    ,inning
    ,inning_topbot
    ,at_bat_number
-   ,CASE WHEN cte_base_statcast._events IS NOT NULL
-         THEN  cte_base_statcast._events
-         END AS outcome
-   ,CASE WHEN safe_or_out = 'out' THEN 1
-         WHEN safe_or_out = 'safe' THEN 0
-         ELSE NULL END AS reverse_safe_or_out_bool
-   ,SUM(reverse_safe_or_out_bool) OVER (PARTITION BY pitcher_id, game_year ORDER BY game_pk, inning, at_bat_number) AS running_outs_by_pitcher
-   FROM cte_base_statcast
-   LEFT JOIN cte_statcast_events
-     ON cte_base_statcast._events = cte_statcast_events._events
-   WHERE outcome IS NOT NULL
-   ORDER BY 3,6,2
+   ,case when _base_statcast._events is not null
+         then  _base_statcast._events
+         end AS outcome
+   ,case when safe_or_out = 'out' then 1
+         when safe_or_out = 'safe' then 0
+         else null end AS reverse_safe_or_out_bool
+   ,sum(reverse_safe_or_out_bool) over (partition by pitcher_id, game_year order by game_pk, inning, at_bat_number) as running_outs_by_pitcher
+   from _base_statcast
+   left join _statcast_events
+     on _base_statcast._events = _statcast_events._events
+   where outcome is not null
+   order by 3,6,2
 ), 
-cte_innings_partitions AS (
-  SELECT
+_innings_partitions as (
+  select
     plt_apprnc_pk
    ,pitcher_id
    ,pitcher_full_name
@@ -49,38 +49,38 @@ cte_innings_partitions AS (
    ,inning
    ,inning_topbot
    ,at_bat_number
-   ,CASE WHEN running_outs_by_pitcher BETWEEN 0 AND 60
-         THEN 'a_0_20'
-         WHEN running_outs_by_pitcher BETWEEN 61 AND 120
-         THEN 'b_21_40'
-         WHEN running_outs_by_pitcher BETWEEN 121 AND 180
-         THEN 'c_41_60'
-         WHEN running_outs_by_pitcher BETWEEN 181 AND 240
-         THEN 'd_61_80'
-         WHEN running_outs_by_pitcher BETWEEN 241 AND 300
-         THEN 'e_81_100'
-         WHEN running_outs_by_pitcher BETWEEN 301 AND 360
-         THEN 'f_101_120'
-         WHEN running_outs_by_pitcher BETWEEN 361 AND 420
-         THEN 'g_121_140'
-         WHEN running_outs_by_pitcher BETWEEN 421 AND 480
-         THEN 'h_141_160'
-         WHEN running_outs_by_pitcher BETWEEN 481 AND 540
-         THEN 'i_161_180'
-         WHEN running_outs_by_pitcher BETWEEN 541 AND 600
-         THEN 'j_181_200'
-         WHEN running_outs_by_pitcher BETWEEN 601 AND 660
-         THEN 'k_201_220'
-         WHEN running_outs_by_pitcher BETWEEN 661 AND 720
-         THEN 'l_221_240'
-         END AS inning_block
-  FROM cte_pa
+   ,case when running_outs_by_pitcher between 0 and 60
+         then 'a_0_20'
+         when running_outs_by_pitcher between 61 and 120
+         then 'b_21_40'
+         when running_outs_by_pitcher between 121 and 180
+         then 'c_41_60'
+         when running_outs_by_pitcher between 181 and 240
+         then 'd_61_80'
+         when running_outs_by_pitcher between 241 and 300
+         then 'e_81_100'
+         when running_outs_by_pitcher between 301 and 360
+         then 'f_101_120'
+         when running_outs_by_pitcher between 361 and 420
+         then 'g_121_140'
+         when running_outs_by_pitcher between 421 and 480
+         then 'h_141_160'
+         when running_outs_by_pitcher between 481 and 540
+         then 'i_161_180'
+         when running_outs_by_pitcher between 541 and 600
+         then 'j_181_200'
+         when running_outs_by_pitcher between 601 and 660
+         then 'k_201_220'
+         when running_outs_by_pitcher between 661 and 720
+         then 'l_221_240'
+         end AS inning_block
+  from _pa
 ),
-cte_inning_partition_stats AS (
-  SELECT
+_inning_partition_stats AS (
+  select
     a.plt_apprnc_pk
    ,a.game_pk
-   ,YEAR(a.gm_date) AS _year
+   ,year(a.gm_date) AS _year
    ,a.gm_date
    ,a.pitcher_id
    ,a.pitcher_full_name
@@ -94,46 +94,46 @@ cte_inning_partition_stats AS (
    ,release_spin_rate
    ,pfx_x
    ,pfx_z
-  FROM cte_base_statcast a
-  JOIN cte_innings_partitions b
-    ON a.plt_apprnc_pk = b.plt_apprnc_pk
+  from _base_statcast a
+  join _innings_partitions b
+    on a.plt_apprnc_pk = b.plt_apprnc_pk
 ),
-cte_avg AS (
-  SELECT
+_avg AS (
+  select
     pitcher_id
    ,pitcher_full_name
    ,_year
    ,inning_block
    ,pitch_type_cond_lvii
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(release_speed)
-         END AS fb_velo
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(release_spin_rate)
-         END AS fb_spin_rate
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(pfx_x)
-         END AS fb_x_axis_movement
-   ,CASE WHEN pitch_type_cond_lvii = 'fb'
-         THEN AVG(pfx_z)
-         END AS fb_z_axis_movement
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(release_speed)
-         END AS br_velo
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(release_spin_rate)
-         END AS br_spin_rate
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(pfx_x)
-         END AS br_x_axis_movement
-   ,CASE WHEN pitch_type_cond_lvii = 'br'
-         THEN AVG(pfx_z)
-         END AS br_z_axis_movement
-  FROM cte_inning_partition_stats 
-  GROUP BY 1,2,3,4,5
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(release_speed)
+         end AS fb_velo
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(release_spin_rate)
+         end AS fb_spin_rate
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(pfx_x)
+         end AS fb_x_axis_movement
+   ,case when pitch_type_cond_lvii = 'fb'
+         then avg(pfx_z)
+         end AS fb_z_axis_movement
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(release_speed)
+         end AS br_velo
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(release_spin_rate)
+         end AS br_spin_rate
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(pfx_x)
+         end AS br_x_axis_movement
+   ,case when pitch_type_cond_lvii = 'br'
+         then avg(pfx_z)
+         end AS br_z_axis_movement
+  from _inning_partition_stats 
+  group by 1,2,3,4,5
 ),
-cte_consolidation AS (
-  SELECT
+_consolidation AS (
+  select
     pitcher_id
    ,pitcher_full_name
    ,_year
@@ -147,12 +147,12 @@ cte_consolidation AS (
     ,ROUND ( MAX(br_spin_rate), 2) AS br_spin_rate
     ,ROUND ( MAX(br_x_axis_movement), 2) AS br_x_axis_movement
     ,ROUND ( MAX(br_z_axis_movement), 2) AS br_z_axis_movement
-  FROM cte_avg
-  GROUP BY 1,2,3,4
-  ORDER BY 1,3,4
+  from _avg
+  group by 1,2,3,4
+  order by 1,3,4
 ),
-cte_variance AS (
-  SELECT
+_variance AS (
+  select
      pitcher_id
     ,pitcher_full_name
     ,_year
@@ -165,10 +165,10 @@ cte_variance AS (
     ,br_spin_rate
     ,br_x_axis_movement
     ,br_z_axis_movement
-  FROM cte_consolidation
-  ORDER BY 1,3,4
+  from _consolidation
+  order by 1,3,4
   ),
-cte_final AS (
-  SELECT * FROM cte_variance
+_final AS (
+  select * from _variance
   )
-SELECT * FROM cte_final
+select * from _final

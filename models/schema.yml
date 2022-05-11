@@ -331,7 +331,7 @@ models:
         description: Two digit abbreviation for pitch
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
       - name: gm_date
         description: day game was played
       - name: game_year
