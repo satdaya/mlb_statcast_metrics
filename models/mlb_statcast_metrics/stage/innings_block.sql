@@ -6,41 +6,41 @@
     )
 }}
 
-WITH cte_pitchers_time_thru_order AS (
-  SELECT * FROM {{ref('pitchers_inning_blocks')}}
+with cte_pitchers_time_thru_order AS (
+  select * from {{ref('pitchers_inning_blocks')}}
 ),
 cte_remove_individual_pitchers AS (
-  SELECT
+  select
      _year
     ,inning_block
-    ,AVG(fb_velo) AS fb_velo
-    ,AVG(fb_spin_rate) AS fb_spin_rate
-    ,AVG(fb_x_axis_movement) AS fb_x_axis_movement
-    ,AVG(fb_z_axis_movement) AS fb_z_axis_movement
-    ,AVG(br_spin_rate) AS br_spin_rate
-    ,AVG(br_x_axis_movement) AS br_x_axis_movement
-    ,AVG(br_z_axis_movement) AS br_z_axis_movement
-  FROM cte_pitchers_time_thru_order
+    ,avg(fb_velo) AS fb_velo
+    ,avg(fb_spin_rate) AS fb_spin_rate
+    ,avg(fb_x_axis_movement) AS fb_x_axis_movement
+    ,avg(fb_z_axis_movement) AS fb_z_axis_movement
+    ,avg(br_spin_rate) AS br_spin_rate
+    ,avg(br_x_axis_movement) AS br_x_axis_movement
+    ,avg(br_z_axis_movement) AS br_z_axis_movement
+  from cte_pitchers_time_thru_order
   GROUP BY 1,2
   ),
 cte_consolidation AS (
-  SELECT 
+  select 
      _year
     ,inning_block
     ,_year || inning_block AS tab_pk
-    ,MAX(fb_velo) AS fb_velo
-    ,MAX(fb_spin_rate) AS fb_spin_rate
-    ,MAX(fb_x_axis_movement) AS fb_x_axis_movement
-    ,MAX(fb_z_axis_movement) AS fb_z_axis_movement
-    ,MAX(br_spin_rate) AS br_spin_rate
-    ,MAX(br_x_axis_movement) AS br_x_axis_movement
-    ,MAX(br_z_axis_movement) AS br_z_axis_movement
-  FROM cte_remove_individual_pitchers
+    ,max(fb_velo) AS fb_velo
+    ,max(fb_spin_rate) AS fb_spin_rate
+    ,max(fb_x_axis_movement) AS fb_x_axis_movement
+    ,max(fb_z_axis_movement) AS fb_z_axis_movement
+    ,max(br_spin_rate) AS br_spin_rate
+    ,max(br_x_axis_movement) AS br_x_axis_movement
+    ,max(br_z_axis_movement) AS br_z_axis_movement
+  from cte_remove_individual_pitchers
   GROUP BY 1,2,3
   ORDER BY 1,2
 ),
 cte_variance AS (
-  SELECT
+  select
      _year
     ,inning_block
     ,_year || inning_block AS tab_pk
@@ -51,10 +51,10 @@ cte_variance AS (
     ,br_spin_rate
     ,br_x_axis_movement
     ,br_z_axis_movement
-   FROM cte_consolidation
-   ORDER BY 3
+   from cte_consolidation
+   order by 3
 ),
 cte_final AS (
-  SELECT * FROM cte_variance
+  select * from cte_variance
 )
-SELECT * FROM cte_final
+select * from cte_final
