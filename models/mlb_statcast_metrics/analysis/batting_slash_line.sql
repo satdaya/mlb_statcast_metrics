@@ -5,39 +5,39 @@
     )
 }}
 
-WITH cte_stg_plate_appearance AS (
-  SELECT * FROM {{ref('stg_plate_appearance')}}
+with _stg_plate_appearance as (
+  select * from {{ref('stg_plate_appearance')}}
 ),
-cte_woba_fip_cnst AS (
-  SELECT * FROM {{ref('woba_fip_cnst')}}
+_woba_fip_cnst as (
+  select * from {{ref('woba_fip_cnst')}}
 ),
-cte_slash_line AS (
-  SELECT
+_slash_line as (
+  select
      batter_id
     ,batter_full_name
-    ,bs.game_year AS game_year
-    ,ROUND( SUM(ab_safe_or_out_bool) / SUM(is_at_bat_bool) , 3) AS batting_avg
-    ,ROUND( SUM(pa_safe_or_out_bool) / SUM(is_plate_appearance_bool), 3) AS obp --on base percentage
-    ,ROUND( SUM(bases_for_slg) / SUM(is_at_bat_bool), 3) as slg_percentage -- slugging percentage
-    ,obp + slg_percentage AS ops -- on base percentage plus slugging percentage
-    --wOBA (weighted on base average) uses a predetermined scale (varies by season) to weight significance of outcome.
-    ,ROUND( ( (SUM(walk) * MIN(wf.wbb)) + (SUM(hbp) * MIN(wf.whbp) )  + (SUM(single) * MIN( wf.w1b)) + (SUM(double) * MIN(wf.w2b)) + (SUM(triple) * MIN( wf.w3b))
-      + (SUM(home_run) * MIN(wf.whr)) ) / ( (SUM(is_at_bat_bool) + SUM(walk) - SUM(ibb) + SUM(sf) + SUM(hbp) ) ), 3 ) AS wOBA_pl
-    --wRAA (weight runs above average) - how many runs a player adds to the team compared to the average player (scored at 0)
-    ,ROUND( ( ( wOBA_pl - MIN(wf.woba) ) / MIN(wf.wobascale) ) * SUM(is_plate_appearance_bool), 3 ) as wRAA
-  FROM cte_stg_plate_appearance bs
-  JOIN cte_woba_fip_cnst wf
-    ON bs.game_year = wf.season
-  JOIN stg_game_count gc
-    ON bs.game_pk = gc.game_pk
-   AND bs.game_year = gc.game_year
-   AND bs.batting_team = gc.team
-  GROUP BY 1,2,3
-  HAVING SUM(is_plate_appearance_bool) >= (MAX(gc.game_count) * 3.1)
-  ORDER BY 6 DESC
+    ,bs.game_year as game_year
+    ,round( sum(ab_safe_or_out_bool) / sum(is_at_bat_bool) , 3) as batting_avg
+    ,round( sum(pa_safe_or_out_bool) / sum(is_plate_appearance_bool), 3) as obp --on base percentage
+    ,round( sum(bases_for_slg) / sum(is_at_bat_bool), 3) as slg_percentage -- slugging percentage
+    ,obp + slg_percentage as ops -- on base percentage plus slugging percentage
+    --woba (weighted on base average) uses a predetermined scale (varies by season) to weight significance of outcome.
+    ,round( ( (sum(walk) * min(wf.wbb)) + (sum(hbp) * min(wf.whbp) )  + (sum(single) * min( wf.w1b)) + (sum(double) * min(wf.w2b)) + (sum(triple) * min( wf.w3b))
+      + (sum(home_run) * min(wf.whr)) ) / ( (sum(is_at_bat_bool) + sum(walk) - sum(ibb) + sum(sf) + sum(hbp) ) ), 3 ) as woba_pl
+    --wraa (weight runs above average) - how many runs a player adds to the team compared to the average player (scored at 0)
+    ,round( ( ( woba_pl - min(wf.woba) ) / min(wf.wobascale) ) * sum(is_plate_appearance_bool), 3 ) as wraa
+  from _stg_plate_appearance bs
+  join _woba_fip_cnst wf
+    on bs.game_year = wf.season
+  join stg_game_count gc
+    on bs.game_pk = gc.game_pk
+   and bs.game_year = gc.game_year
+   and bs.batting_team = gc.team
+  group by 1,2,3
+  having sum(is_plate_appearance_bool) >= (max(gc.game_count) * 3.1)
+  order by 6 desc
   ), 
-cte_final AS (
-  SELECT * FROM cte_slash_line
+_final as (
+  select * from _slash_line
   )
 
-SELECT * FROM cte_final
+select * from _final

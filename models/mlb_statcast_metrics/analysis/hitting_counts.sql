@@ -5,28 +5,28 @@
     )
 }}
 
-WITH cte_plate_appearance AS (
-  SELECT * FROM {{ref('stg_plate_appearance')}}
+with _plate_appearance as (
+  select * from {{ref('stg_plate_appearance')}}
   ),
-cte_counts AS (
-  SELECT
-    DISTINCT batter_id
+_counts as (
+  select
+    distinct batter_id
    ,batter_full_name
    ,game_year
-   ,SUM(is_plate_appearance_bool) AS pa
-   ,SUM(is_at_bat_bool) AS ab
-   ,( SUM(single) + SUM(double) + SUM(triple) + SUM(home_run) ) AS hit
-   ,SUM(hbp) AS hit_by_pitch
-   ,SUM(walk) AS walk
-   ,SUM(single) AS single
-   ,SUM(double) AS double
-   ,SUM(triple) AS triple
-   ,SUM(home_run) AS home_run
-  FROM cte_plate_appearance
-  GROUP BY 1,2,3
+   ,sum(is_plate_appearance_bool) as pa
+   ,sum(is_at_bat_bool) as ab
+   ,( sum(single) + sum(double) + sum(triple) + sum(home_run) ) as hit
+   ,sum(hbp) as hit_by_pitch
+   ,sum(walk) as walk
+   ,sum(single) as single
+   ,sum(double) as double
+   ,sum(triple) as triple
+   ,sum(home_run) as home_run
+  from _plate_appearance
+  group by 1,2,3
   ),
-  cte_final AS (
-  SELECT * FROM cte_counts
+_final as (
+  select * from _counts
   )
 
-SELECT * FROM cte_final
+select * from _final

@@ -5,12 +5,12 @@
     )
 }}
 
-WITH cte_base_statcast AS (
-  SELECT * FROM {{ref('base_statcast')}}
-),cte_statcast_events AS (
-  SELECT * FROM {{ref('statcast_events')}}
-),cte_pitch_sequence AS (
-  SELECT
+with _base_statcast as (
+  select * from {{ref('base_statcast')}}
+),_statcast_events as (
+  select * from {{ref('statcast_events')}}
+),_pitch_sequence as (
+  select
      game_pk
     ,pitcher_id
     ,pitcher_full_name
@@ -19,11 +19,11 @@ WITH cte_base_statcast AS (
     ,batting_team
     ,fielding_team
     ,inning
-    ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
-  FROM cte_base_statcast
+    ,game_pk || pitcher_id || batter_id || inning as plt_apprnc_pk
+  from _base_statcast
 ),
-cte_batting_metrics AS (
-  SELECT
+_batting_metrics as (
+  select
    gm_date
   ,game_year
   ,game_pk
@@ -34,68 +34,68 @@ cte_batting_metrics AS (
   ,batting_team
   ,fielding_team
   ,inning
-  ,fld_score AS fielding_team_score
-  ,bat_score AS batting_score
-  ,hit_distance_sc AS hit_distance
+  ,fld_score as fielding_team_score
+  ,bat_score as batting_score
+  ,hit_distance_sc as hit_distance
   ,bs._events
-  ,game_pk || pitcher_id || batter_id || inning AS plt_apprnc_pk
-  ,se.is_ab AS is_at_bat
-  ,se.is_ab_bool AS is_at_bat_bool
-  ,se.ab_safe_or_out AS ab_safe_or_out
-  ,se.ab_safe_or_out_bool AS ab_safe_or_out_bool
-  ,se.is_pa AS is_plate_appearance
-  ,se.is_pa_bool AS is_plate_appearance_bool
-  ,se.pa_safe_or_out AS pa_safe_or_out
-  ,se.pa_safe_or_out_bool AS pa_safe_or_out_bool
+  ,game_pk || pitcher_id || batter_id || inning as plt_apprnc_pk
+  ,se.is_ab as is_at_bat
+  ,se.is_ab_bool as is_at_bat_bool
+  ,se.ab_safe_or_out as ab_safe_or_out
+  ,se.ab_safe_or_out_bool as ab_safe_or_out_bool
+  ,se.is_pa as is_plate_appearance
+  ,se.is_pa_bool as is_plate_appearance_bool
+  ,se.pa_safe_or_out as pa_safe_or_out
+  ,se.pa_safe_or_out_bool as pa_safe_or_out_bool
   ,se.bases_for_slg
-  ,CASE WHEN bs._events = 'hit_by_pitch'
-        THEN 1
-        ELSE 0 
-        END AS hbp
-  ,CASE WHEN bs._events = 'walk'
-        THEN 1
-        ELSE 0
-        END AS walk
-  ,CASE WHEN bs._events = 'intentional_walk'
-        THEN 1
-        ELSE 0
-        END AS ibb
-  ,CASE WHEN bs._events = 'single'
-        THEN 1
-        ELSE 0
-        END AS single
-  ,CASE WHEN bs._events = 'double'
-        THEN 1
-        ELSE 0
-        END AS double
-  ,CASE WHEN bs._events = 'triple'
-        THEN 1
-        ELSE 0 
-        END AS triple
-  ,CASE WHEN bs._events = 'home_run'
-        THEN 1
-        ELSE 0 
-        END AS home_run
-  ,CASE WHEN bs._events ILIKE ('%sac%')
-        THEN 1
-        ELSE 0 
-        END AS sf
-  ,CASE WHEN bs._events ILIKE ('%strikeout%')
-        THEN 1
-        ELSE 0 
-        END AS strikeout
-  ,MAX(pitch_number) AS no_of_pitches
-FROM cte_base_statcast bs
-JOIN cte_statcast_events se
-  ON bs._events = se._events
-WHERE bs._events IS NOT NULL
-  AND bs._events NOT IN ('wild_pitch', 'passed_ball')
-GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+  ,case when bs._events = 'hit_by_pitch'
+        then 1
+        else 0 
+        end as hbp
+  ,case when bs._events = 'walk'
+        then 1
+        else 0
+        end as walk
+  ,case when bs._events = 'intentional_walk'
+        then 1
+        else 0
+        end as ibb
+  ,case when bs._events = 'single'
+        then 1
+        else 0
+        end as single
+  ,case when bs._events = 'double'
+        then 1
+        else 0
+        end as double
+  ,case when bs._events = 'triple'
+        then 1
+        else 0 
+        end as triple
+  ,case when bs._events = 'home_run'
+        then 1
+        else 0 
+        end as home_run
+  ,case when bs._events ilike ('%sac%')
+        then 1
+        else 0 
+        end as sf
+  ,case when bs._events ilike ('%strikeout%')
+        then 1
+        else 0 
+        end as strikeout
+  ,max(pitch_number) as no_of_pitches
+from _base_statcast bs
+join _statcast_events se
+  on bs._events = se._events
+where bs._events is not null
+  and bs._events not in ('wild_pitch', 'passed_ball')
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
 ),
-cte_final AS (
-  SELECT *
-  FROM cte_batting_metrics
+_final as (
+  select *
+  from _batting_metrics
 )
 
-SELECT *
-FROM cte_final
+select *
+from _final
