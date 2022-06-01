@@ -86,11 +86,6 @@ sources:
            tests:
              - accepted_values:
                  values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
-         - name: bb_type
-           description: type of ball put in play
-           tests:
-              - accepted_values: 
-                  values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
          - name: balls
            description: balls in the count
            tests:
@@ -105,7 +100,7 @@ sources:
            description: year game took place
            tests:
              - accepted_values:
-                 values: ['2017', '2018', '2019', '2020', '2021']
+                 values: ['2017', '2018', '2019', '2020', '2021', '2022']
          - name: pfx_x
            description: Horizontal movement in feet from the catcher's perspective.
          - name: pfx_z
@@ -331,14 +326,14 @@ models:
         description: Two digit abbreviation for pitch
         tests:
           - accepted_values:
-              values: ['SL', 'CU', 'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: gm_date
         description: day game was played
       - name: game_year
         description: year game took place
         tests:
           - accepted_values:
-              values: ['2017', '2018', '2019', '2020', '2021']
+              values: ['2017', '2018', '2019', '2020', '2021', '2022']
       - name: release_speed
         description: Pitch velocity as it leaves the hand.
       - name: release_pos_x
@@ -427,11 +422,6 @@ models:
         tests:
           - accepted_values:
               values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
-      - name: bb_type
-        description: type of ball put in play
-        tests:
-          - accepted_values:
-              values: ['fly_ball', 'ground_ball', 'line_drive', 'popup']
       - name: balls
         description: balls in the count
         tests:
@@ -442,11 +432,6 @@ models:
         tests:
           - accepted_values:
               values: [0, 1, 2, 3]
-      - name: game_year
-        description: year game took place
-        tests:
-          - accepted_values:
-              values: ['2017', '2018', '2019', '2020', '2021']
       - name: pfx_x
         description: Horizontal movement in feet from the catcher's perspective.
       - name: pfx_z
@@ -602,127 +587,127 @@ models:
         description: pitch type of first pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: second_pitch
         description: pitch type of second pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: third_pitch
         description: pitch type of third pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: fourth_pitch
         description: pitch type of fourth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: fifth_pitch
         description: pitch type of fifth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: sixth_pitch
         description: pitch type of sixth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: seventh_pitch
         description: pitch type of seventh pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: eighth_pitch
         description: pitch type of eighth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: ninth_pitch
         description: pitch type of ninth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: tenth_pitch
         description: pitch type of tenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: eleventh_pitch
         description: pitch type of eleventh pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: twelfth_pitch
         description: pitch type of twelfth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: thirteenth_pitch
         description: pitch type of thirteenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: fourteenth_pitch
         description: pitch type of fourteenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: fifteenth_pitch
         description: pitch type of fifteenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: sixteenth_pitch
         description: pitch type of sixteenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: seventeenth_pitch
         description: pitch type of seventeenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: eighteenth_pitch
         description: pitch type of eighteenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: nineteenth_pitch
         description: pitch type of nineteenth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: twentieth_pitch
         description: pitch type of twentieth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: twenty_first_pitch
         description: pitch type of twenty_first pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: twenty_second_pitch
         description: pitch type of twenty_second pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: twenty_third_pitch
         description: pitch type of twenty_third_ pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: twenty_fourth_pitch
         description: pitch type of twenty_fourth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
       - name: twenty_fifth_pitch
         description: pitch type of twenty_fifth pitch of the plate appearance
         tests:
           - accepted_values:
-              values: ['SL', 'CU',	'SI',	'FO',	'CS',	'CH',	'KN',	'EP', 'KC',	'SC',	'FA',	'FF',	'FT',	'FS',	'FC',	'PO']
+              values: ['SL', 'CU', 'SI', 'FO', 'CS', 'CH', 'KN', 'EP', 'KC', 'SC', 'FA', 'FF', 'FT', 'FS', 'FC', 'PO']
   - name: stg_plate_appearance
     columns:
       - name: gm_date
@@ -864,7 +849,7 @@ models:
         description: year game took place
         tests:
           - accepted_values:
-              values: ['2017', '2018', '2019', '2020', '2021']
+              values: ['2017', '2018', '2019', '2020', '2021', '2022']
       - name: game_count
         description: number of games played by team ( inclusive of current date )
       - name: yearly_game_count
@@ -883,7 +868,7 @@ models:
         description: year game took place
         tests:
           - accepted_values:
-              values: ['2017', '2018', '2019', '2020', '2021']
+              values: ['2017', '2018', '2019', '2020', '2021', '2022']
       - name: date_to_100_k
         description: date the batter had 100th strikeout
   - name: hitting_counts
