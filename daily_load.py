@@ -25,7 +25,7 @@ csv_buffer = StringIO()
 statcast_data.to_csv(csv_buffer)
 
 bucket_name = 'statcast-data-2022'
-s3_object_name = f"statcast_data_{two_days_ago}"
+s3_object_name = f"statcast_data_{yesterday}"
 s3_res.Object(bucket_name, s3_object_name).put(Body=csv_buffer.getvalue())
 
 
