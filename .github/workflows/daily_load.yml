@@ -4,7 +4,7 @@ name: daily_statcast_load
 # testing cron job for 16:50 PST/ 23:50 UTC
 on:
   schedule:
-    - cron: '50 23 * * *'
+    - cron: '05 0 * * *'
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run daily_load script
         env: 
-          _AWS_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_KEY_ID }} 
-          _AWS_ACCESS_SECRET_ID: ${{ secrets.AWS_SECRET_SECRET_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_KEY_ID }} 
+          AWS_ACCESS_SECRET_ID: ${{ secrets.AWS_SECRET_SECRET_ID }}
         run:
           python daily_load.py
