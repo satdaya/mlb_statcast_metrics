@@ -1,10 +1,10 @@
 
 name: daily_statcast_load
 
-
+#testing cron schedul
 on:
   schedule:
-    - cron: '11 0 * * *'
+    - cron: '*/11 * * * *'
 
 jobs:
   build:
