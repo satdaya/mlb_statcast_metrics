@@ -4,7 +4,7 @@ name: daily_statcast_load
 # testing cron job for 16:50 PST/ 23:50 UTC
 on:
   schedule:
-    - cron: '05 0 * * *'
+    - cron: '25 0 * * *'
 
 jobs:
   build:
