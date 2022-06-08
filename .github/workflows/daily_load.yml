@@ -1,10 +1,10 @@
 
 name: daily_statcast_load
 
-# testing cron job for 1:00 PST/ 17:00 UTC
+# testing cron job on every 11 minute cadence
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '0 /11 * * *'
 
 jobs:
   build:
