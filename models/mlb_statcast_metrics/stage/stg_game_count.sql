@@ -47,7 +47,7 @@ _yearly_count as (
    ,team
    ,max(game_count) as yearly_game_count
   from _count
-  group by 1,2
+{{ dbt_utils.group_by(2) }}
   ),
 _final as (
 select

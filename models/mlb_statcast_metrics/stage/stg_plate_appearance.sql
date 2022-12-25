@@ -90,7 +90,7 @@ join _statcast_events se
   on bs._events = se._events
 where bs._events is not null
   and bs._events not in ('wild_pitch', 'passed_ball')
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
+{{ dbt_utils.group_by(25) }}
 ),
 _final as (
   select *

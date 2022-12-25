@@ -36,7 +36,6 @@ _pa AS (
    left join _statcast_events
      on _base_statcast._events = _statcast_events._events
    where outcome is not null
-   order by 3,6,2
 ), 
 _innings_partitions as (
   select
@@ -130,7 +129,7 @@ _avg AS (
          then avg(pfx_z)
          end AS br_z_axis_movement
   from _inning_partition_stats 
-  group by 1,2,3,4,5
+  {{ dbt_utils.group_by(5) }}
 ),
 _consolidation AS (
   select
@@ -139,17 +138,16 @@ _consolidation AS (
    ,_year
    ,inning_block
    ,pitcher_id || _year || inning_block AS tab_pk
-    ,ROUND ( MAX(fb_velo), 2) AS fb_velo
-    ,ROUND ( MAX(fb_spin_rate), 2) AS fb_spin_rate
-    ,ROUND ( MAX(fb_x_axis_movement), 2) AS fb_x_axis_movement
-    ,ROUND ( MAX(fb_z_axis_movement), 2) AS fb_z_axis_movement
-    ,ROUND ( MAX(br_velo), 2) AS br_velo
-    ,ROUND ( MAX(br_spin_rate), 2) AS br_spin_rate
-    ,ROUND ( MAX(br_x_axis_movement), 2) AS br_x_axis_movement
-    ,ROUND ( MAX(br_z_axis_movement), 2) AS br_z_axis_movement
+    ,round ( max(fb_velo), 2) AS fb_velo
+    ,round ( max(fb_spin_rate), 2) AS fb_spin_rate
+    ,round ( max(fb_x_axis_movement), 2) AS fb_x_axis_movement
+    ,round ( max(fb_z_axis_movement), 2) AS fb_z_axis_movement
+    ,round ( max(br_velo), 2) AS br_velo
+    ,round ( max(br_spin_rate), 2) AS br_spin_rate
+    ,round ( max(br_x_axis_movement), 2) AS br_x_axis_movement
+    ,round ( max(br_z_axis_movement), 2) AS br_z_axis_movement
   from _avg
-  group by 1,2,3,4
-  order by 1,3,4
+  {{ dbt_utils.group_by(4) }}
 ),
 _variance AS (
   select
@@ -166,7 +164,6 @@ _variance AS (
     ,br_x_axis_movement
     ,br_z_axis_movement
   from _consolidation
-  order by 1,3,4
   ),
 _final AS (
   select * from _variance

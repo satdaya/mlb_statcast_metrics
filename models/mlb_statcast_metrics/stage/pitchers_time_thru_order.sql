@@ -107,7 +107,7 @@ _avg as (
          then avg(pfx_z)
          end as br_z_axis_movement
   from _time_thru_the_order_stats
-  group by 1,2,3,4,5
+  {{ dbt_utils.group_by(5) }}
 ),
 _consolidation as (
   select
@@ -125,8 +125,7 @@ _consolidation as (
    ,round ( max(br_x_axis_movement), 2) as br_x_axis_movement
    ,round ( max(br_z_axis_movement), 2) as br_z_axis_movement
   from _avg
-  group by 1,2,3,4
-  order by 1,3,4
+  {{ dbt_utils.group_by(4) }}
 ),
 _variance as (
   select

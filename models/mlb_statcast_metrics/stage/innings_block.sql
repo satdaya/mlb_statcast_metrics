@@ -21,7 +21,7 @@ _remove_individual_pitchers AS (
     ,avg(br_x_axis_movement) AS br_x_axis_movement
     ,avg(br_z_axis_movement) AS br_z_axis_movement
   from _pitchers_time_thru_order
-  GROUP BY 1,2
+  {{ dbt_utils.group_by(2) }}
   ),
 _consolidation AS (
   select 
@@ -36,8 +36,7 @@ _consolidation AS (
     ,max(br_x_axis_movement) AS br_x_axis_movement
     ,max(br_z_axis_movement) AS br_z_axis_movement
   from _remove_individual_pitchers
-  GROUP BY 1,2,3
-  ORDER BY 1,2
+  {{ dbt_utils.group_by(3) }}
 ),
 _variance AS (
   select
@@ -52,7 +51,6 @@ _variance AS (
     ,br_x_axis_movement
     ,br_z_axis_movement
    from _consolidation
-   order by 3
 ),
 _final AS (
   select * from _variance

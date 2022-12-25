@@ -100,7 +100,7 @@ _pitch_number as (
               then pitch_type_cond_lvi
               end) as twenty_fifth_pitch
   from _base_statcast
-  group by 1,2,3,4,5,6,7,8,9
+  {{ dbt_utils.group_by(9) }}
   ),
 _outcome as (
   select
@@ -164,7 +164,7 @@ _condensed as (
     on pn.plt_apprnc_pk = o.plt_apprnc_pk
   join _statcast_events se
     on o.outcome = se._events
-  group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
+    {{ dbt_utils.group_by(17) }}
 ),
 _pitch_sequence as (
   select *

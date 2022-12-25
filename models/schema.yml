@@ -432,6 +432,11 @@ models:
         tests:
           - accepted_values:
               values: [0, 1, 2, 3]
+      - name: game_year
+        description: year game took place
+        tests:
+          - accepted_values:
+              values: ['2017', '2018', '2019', '2020', '2021', '2022']
       - name: pfx_x
         description: Horizontal movement in feet from the catcher's perspective.
       - name: pfx_z
