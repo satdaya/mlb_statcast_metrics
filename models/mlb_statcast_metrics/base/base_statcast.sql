@@ -28,13 +28,13 @@ _base_statcast as (
    ,player_name as pitcher_full_name
    ,split_part(player_name, ', ', -1) as pitcher_first_name
    ,split_part(player_name, ', ', 1) as pitcher_last_name
-   ,case when des ILIKE ('%:%')
-         then SPLIT_PART(des, ': ', -1)
-         else SPLIT_PART(des, ' ', 1) || ' ' || SPLIT_PART(des, ' ', 2)
+   ,case when des ilike ('%:%')
+         then split_part(des, ': ', -1)
+         else split_part(des, ' ', 1) || ' ' || split_part(des, ' ', 2)
          end as step_one_batter_name
-   ,SPLIT_PART(step_one_batter_name, ' ', 1) || ' ' || SPLIT_PART(step_one_batter_name, ' ', 2) as batter_full_name
-   ,SPLIT_PART(batter_full_name, ' ', -1) as batter_first_name
-   ,SPLIT_PART(batter_full_name, ' ', 1) as batter_last_name
+   ,split_part(step_one_batter_name, ' ', 1) || ' ' || split_part(step_one_batter_name, ' ', 2) as batter_full_name
+   ,split_part(batter_full_name, ' ', -1) as batter_first_name
+   ,split_part(batter_full_name, ' ', 1) as batter_last_name
    ,batter as batter_id
    ,pitcher as pitcher_id
    ,_events
@@ -52,12 +52,12 @@ _base_statcast as (
    ,away_team
    ,case when inning_topbot = 'Top'
          then away_team
-         WHEN inning_topbot = 'Bot'
+         when inning_topbot = 'Bot'
          then home_team
          end as batting_team
-  ,case when inning_topbot = 'Top'
+   ,case when inning_topbot = 'Top'
          then home_team
-         WHEN inning_topbot = 'Bot'
+         when inning_topbot = 'Bot'
          then away_team
          end as fielding_team                    
    ,type                            
@@ -82,12 +82,12 @@ _base_statcast as (
    ,fielder_2
    ,umpire
    ,sv_id
-   ,ROUND( vx0,11) as vx0
-   ,ROUND( vy0,11) as vy0
-   ,ROUND( vz0,11) as vz0
-   ,ROUND( ax,11) as ax
-   ,ROUND( ay,11) as ay
-   ,ROUND( az,11) as az
+   ,round( vx0,11) as vx0
+   ,round( vy0,11) as vy0
+   ,round( vz0,11) as vz0
+   ,round( ax,11) as ax
+   ,round( ay,11) as ay
+   ,round( az,11) as az
    ,sz_top                          
    ,sz_bot                          
    ,hit_distance_sc                
@@ -132,139 +132,139 @@ _base_statcast as (
    ,round( delta_run_exp, 4 ) as delta_run_exp
    ,pitcher||batter||at_bat_number||pitch_number||game_pk as at_bat_id
    ,game_pk || pitcher_id || batter_id || inning as plt_apprnc_pk
-   ,case when stand = 'R' AND zone IN ('1', '4', '7')
+   ,case when stand = 'R' and zone in ('1', '4', '7')
          then 'inside'
-         WHEN stand = 'R' AND zone IN ('2', '5', '8')
+         when stand = 'R' and zone in ('2', '5', '8')
          then 'middle'
-         WHEN stand = 'R' AND zone IN ('3', '6', '9')
+         when stand = 'R' and zone in ('3', '6', '9')
          then 'outside'
-         WHEN stand = 'L' AND zone IN ('1', '4', '7')
+         when stand = 'L' and zone in ('1', '4', '7')
          then 'outside'
-         WHEN stand = 'L' AND zone IN ('2', '5', '8')
+         when stand = 'L' and zone in ('2', '5', '8')
          then 'middle'
-         WHEN stand = 'L' AND zone IN ('3', '6', '9')
+         when stand = 'L' and zone in ('3', '6', '9')
          then 'inside'
-         WHEN zone IN ('11', '13')
+         when zone in ('11', '13')
          then 'inner half border'
-         WHEN zone IN ('12', '14')
+         when zone in ('12', '14')
          then 'outer half border'
          else 'ball'
          end as horizontal_loc
-   ,case when zone IN ('1', '2', '3')
+   ,case when zone in ('1', '2', '3')
          then 'low'
-         WHEN zone IN ('4', '5', '6')
+         when zone in ('4', '5', '6')
          then 'middle'
-         WHEN zone IN ('7', '8', '9')
+         when zone in ('7', '8', '9')
          then 'high'
-         WHEN zone IN ('11', '12')
+         when zone in ('11', '12')
          then 'high border'
-         WHEN zone IN ('11', '12')
+         when zone in ('11', '12')
          then 'low border'
          else 'ball'
          end as vertical_loc
-   ,case when horizontal_loc = 'ball' AND vertical_loc = 'ball'
+   ,case when horizontal_loc = 'ball' and vertical_loc = 'ball'
          then 'ball'
          else vertical_loc || ' and ' || horizontal_loc
          end as precision_location
    ,case when pitch_number = 1
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as first_pitch
    ,case when pitch_number = 2
          then pitch_type_cond_lvi
-         else NULL 
+         else null 
          end as second_pitch
    ,case when pitch_number = 3 
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as third_pitch
    ,case when pitch_number = 4
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as fourth_pitch
    ,case when pitch_number = 5 
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as fifth_pitch
    ,case when pitch_number = 6
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as sixth_pitch
    ,case when pitch_number = 7
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as seventh_pitch
    ,case when pitch_number = 8
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as eighth_pitch
    ,case when pitch_number = 9
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as ninth_pitch
    ,case when pitch_number = 10
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as tenth_pitch
    ,case when pitch_number = 11
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as eleventh_pitch
    ,case when pitch_number = 12
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as twelfth_pitch
    ,case when pitch_number = 13
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as thirteenth_pitch
    ,case when pitch_number = 14
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as fourteenth_pitch
    ,case when pitch_number = 15
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as fifteenth_pitch
    ,case when pitch_number = 16
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as sixteenth_pitch
    ,case when pitch_number = 17
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as seventeenth_pitch
    ,case when pitch_number = 18
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as eighteenth_pitch
    ,case when pitch_number = 19
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as nineteenth_pitch
    ,case when pitch_number = 20
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as twentieth_pitch
    ,case when pitch_number = 21
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as twenty_first_pitch
    ,case when pitch_number = 22
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as twenty_second_pitch
    ,case when pitch_number = 23
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as twenty_third_pitch
    ,case when pitch_number = 24
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as twenty_fourth_pitch
    ,case when pitch_number = 25
          then pitch_type_cond_lvi
-         else NULL
+         else null
          end as twenty_fifth_pitch
   from _raw_statcast
   left join _pitch_types
